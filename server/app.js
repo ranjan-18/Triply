@@ -8,7 +8,7 @@ import morgan from "morgan";
 import env from "./config/env.js";
 
 import authRoutes from "./modules/auth/auth.routes.js";
-
+import tripRoutes from "./modules/trips/trip.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -39,6 +39,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
 /**
  * Health Check Route
  */
@@ -55,6 +57,7 @@ app.get("/health", (req, res) => {
  * API Routes
  */
 app.use("/api/auth", authRoutes);
+app.use("/api/trips", tripRoutes);
 
 /**
  * 404 Handler
