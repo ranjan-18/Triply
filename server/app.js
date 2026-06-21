@@ -9,6 +9,7 @@ import env from "./config/env.js";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import tripRoutes from "./modules/trips/trip.routes.js";
+import expenseRoutes from "./modules/expenses/expense.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -58,6 +59,7 @@ app.get("/health", (req, res) => {
  */
 app.use("/api/auth", authRoutes);
 app.use("/api/trips", tripRoutes);
+app.use("/api", expenseRoutes);
 
 /**
  * 404 Handler
