@@ -1,0 +1,46 @@
+# ==========================================
+# Dependency Directories
+# ==========================================
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# ==========================================
+# Environment Variables & Secrets (CRITICAL)
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.env
+server/.env
+client/.env
+
+# ==========================================
+# Production / Build Outputs
+# ==========================================
+client/dist/
+client/build/
+server/dist/
+out/
+
+# ==========================================
+# Logs and Diagnostics
+# ==========================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# ==========================================
+# IDE, Editors, and OS Specific Files
+# ==========================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
