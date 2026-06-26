@@ -1,4 +1,4 @@
-import SearchBar from "./SearchBar";
+
 import {
   FaBell,
   FaPlus,
@@ -84,8 +84,6 @@ const DashboardNavbar = ({
 
       {/* Right */}
       <div className="flex flex-wrap lg:flex-nowrap items-center gap-4 w-full lg:w-auto mt-4 lg:mt-0">
-        <SearchBar />
-
         {/* Create Trip */}
         <button
           onClick={onCreateTrip}

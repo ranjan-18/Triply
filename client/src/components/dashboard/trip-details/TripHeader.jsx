@@ -49,36 +49,46 @@ const TripHeader = ({ trip, onAddExpense }) => {
         z-10
         h-full
         flex
-        items-end
-        justify-between
-        px-10
-        py-10
+        flex-col
+        md:flex-row
+        items-start
+        md:items-end
+        justify-end
+        md:justify-between
+        px-6
+        md:px-10
+        py-6
+        md:py-10
+        gap-4
+        md:gap-0
       "
       >
         {/* Left */}
-        <div>
+        <div className="w-full">
           <h1
             className="
-            text-5xl
+            text-3xl
+            md:text-5xl
             font-bold
             text-white
+            truncate
           "
           >
             {trip.title}
           </h1>
 
-          <div className="flex items-center gap-2 mt-3">
+          <div className="flex items-center gap-2 mt-2 md:mt-3">
             <FaMapMarkerAlt className="text-white/80" />
 
-            <p className="text-xl text-white/90">
+            <p className="text-lg md:text-xl text-white/90 truncate">
               {trip.destination}
             </p>
           </div>
 
           {/* Members */}
-          <div className="flex items-center mt-8">
-            <div className="flex -space-x-4">
-              {trip.members?.map((member) => (
+          <div className="flex items-center mt-4 md:mt-8">
+            <div className="flex -space-x-3 md:-space-x-4">
+              {trip.members?.slice(0, 5).map((member) => (
                 <img
                   key={member.userId._id}
                   src={
@@ -87,18 +97,19 @@ const TripHeader = ({ trip, onAddExpense }) => {
                   }
                   alt={member.userId.name}
                   className="
-                  w-14
-                  h-14
+                  w-10
+                  h-10
+                  md:w-14
+                  md:h-14
                   rounded-full
-                  border-4
+                  border-2
+                  md:border-4
                   border-white
                   object-cover
                 "
                 />
               ))}
             </div>
-
-            {trip?.members?.length || 0} Members
           </div>
         </div>
 
@@ -108,17 +119,26 @@ const TripHeader = ({ trip, onAddExpense }) => {
           className="
           flex
           items-center
-          gap-3
+          justify-center
+          gap-2
+          md:gap-3
           bg-white
           text-violet-600
-          px-8
-          py-4
-          rounded-2xl
+          px-6
+          py-3
+          md:px-8
+          md:py-4
+          rounded-xl
+          md:rounded-2xl
           font-semibold
-          text-lg
+          text-base
+          md:text-lg
           shadow-xl
           hover:scale-105
           transition
+          w-full
+          md:w-auto
+          shrink-0
         "
         >
           <FaPlus />

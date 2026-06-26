@@ -12,7 +12,7 @@ const DashboardLayout = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f7f4ff] flex relative">
+    <div className="min-h-screen bg-[#f7f4ff] flex relative overflow-x-hidden">
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div 
