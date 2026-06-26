@@ -205,7 +205,7 @@ const GlobalSettlementsPage = () => {
                             </h3>
                             {settlement.proofImageUrl && (
                               <a 
-                                href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || "http://localhost:5000"}${settlement.proofImageUrl}`} 
+                                href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || "https://triply2.onrender.com"}${settlement.proofImageUrl}`} 
                                 target="_blank" 
                                 rel="noreferrer"
                                 className="text-xs text-violet-600 hover:underline flex items-center gap-1 mt-1"

@@ -30,7 +30,7 @@ const RegisterForm = () => {
       setIsLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://triply2.onrender.com/api/auth/register",
         formData
       );
 
