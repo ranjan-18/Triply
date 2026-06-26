@@ -17,6 +17,9 @@ import {
   getTripByIdController,
   joinTripController,
   updateTripController,
+  deleteTripController,
+  leaveTripController,
+  joinTripByCodeController,
 } from "./trip.controller.js";
 
 const router = express.Router();
@@ -40,6 +43,19 @@ router.get(
   "/",
   authMiddleware,
   getUserTripsController
+);
+
+/**
+ * Join Trip By Invite Code
+ * POST /api/trips/join-by-code
+ *
+ * IMPORTANT:
+ * Keep this route ABOVE "/:id"
+ */
+router.post(
+  "/join-by-code",
+  authMiddleware,
+  joinTripByCodeController
 );
 
 /**
@@ -72,6 +88,26 @@ router.patch(
   authMiddleware,
   validate(updateTripSchema),
   updateTripController
+);
+
+/**
+ * Delete Trip
+ * DELETE /api/trips/:id
+ */
+router.delete(
+  "/:id",
+  authMiddleware,
+  deleteTripController
+);
+
+/**
+ * Leave Trip
+ * POST /api/trips/:id/leave
+ */
+router.post(
+  "/:id/leave",
+  authMiddleware,
+  leaveTripController
 );
 
 export default router;

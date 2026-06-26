@@ -95,6 +95,11 @@ const expenseSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    
+    isSettlement: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

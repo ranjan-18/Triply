@@ -1,25 +1,24 @@
+// src/api/authApi.js
+
 import axiosInstance from "./axiosInstance";
 
-export const registerUser = async (
-  payload
-) => {
-  const { data } =
-    await axiosInstance.post(
-      "/auth/register",
-      payload
-    );
+export const loginUser = (
+  data
+) =>
+  axiosInstance.post(
+    "/auth/login",
+    data
+  );
 
-  return data;
-};
+export const registerUser = (
+  data
+) =>
+  axiosInstance.post(
+    "/auth/register",
+    data
+  );
 
-export const loginUser = async (
-  payload
-) => {
-  const { data } =
-    await axiosInstance.post(
-      "/auth/login",
-      payload
-    );
-
-  return data;
-};
+export const logoutUser = () =>
+  axiosInstance.post(
+    "/auth/logout"
+  );

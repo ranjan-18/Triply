@@ -9,6 +9,9 @@ import {
   getTripById,
   joinTrip,
   updateTrip,
+  deleteTrip,
+  leaveTrip,
+  joinTripByCode, 
 } from "./trip.service.js";
 
 /**
@@ -106,6 +109,66 @@ export const updateTripController =
       apiResponse(
         true,
         "Trip updated successfully",
+        trip
+      )
+    );
+  });
+
+  /**
+ * Delete Trip
+ * @route DELETE /api/trips/:id
+ */
+export const deleteTripController =
+  catchAsync(async (req, res) => {
+    await deleteTrip(
+      req.params.id,
+      req.user.id
+    );
+
+    return res.status(200).json(
+      apiResponse(
+        true,
+        "Trip deleted successfully"
+      )
+    );
+  });
+
+/**
+ * Leave Trip
+ * @route POST /api/trips/:id/leave
+ */
+export const leaveTripController =
+  catchAsync(async (req, res) => {
+    await leaveTrip(
+      req.params.id,
+      req.user.id
+    );
+
+    return res.status(200).json(
+      apiResponse(
+        true,
+        "Left trip successfully"
+      )
+    );
+  });
+
+
+  /**
+ * Join Trip By Code
+ * @route POST /api/trips/join-by-code
+ */
+export const joinTripByCodeController =
+  catchAsync(async (req, res) => {
+    const trip =
+      await joinTripByCode(
+        req.body.inviteCode,
+        req.user.id
+      );
+
+    return res.status(200).json(
+      apiResponse(
+        true,
+        "Joined trip successfully",
         trip
       )
     );

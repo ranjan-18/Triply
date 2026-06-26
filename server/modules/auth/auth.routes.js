@@ -16,6 +16,7 @@ import {
   login,
   refresh,
   logout,
+  updateProfileController,
 } from "./auth.controller.js";
 
 const router = express.Router();
@@ -54,6 +55,15 @@ router.post(
   "/logout",
   authMiddleware,
   logout
+);
+
+/**
+ * Update Profile
+ */
+router.patch(
+  "/profile",
+  authMiddleware,
+  updateProfileController
 );
 
 export default router;

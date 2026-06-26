@@ -32,6 +32,19 @@ const tripSchema = new mongoose.Schema(
       trim: true,
     },
 
+    // Added: Destination field to pass into the Pexels service
+    destination: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // Added: Stores the dynamic dynamic Pexels image string URL
+    coverImage: {
+      type: String,
+      default: "",
+    },
+
     baseCurrency: {
       type: String,
       required: true,
@@ -62,9 +75,6 @@ const tripSchema = new mongoose.Schema(
   }
 );
 
-const Trip = mongoose.model(
-  "Trip",
-  tripSchema
-);
+const Trip = mongoose.model("Trip", tripSchema);
 
 export default Trip;

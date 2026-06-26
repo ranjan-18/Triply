@@ -8,6 +8,7 @@ import {
   loginUser,
   refreshTokens,
   logoutUser,
+  updateProfile,
 } from "./auth.service.js";
 
 /**
@@ -88,3 +89,15 @@ export const logout = catchAsync(
     );
   }
 );
+
+/**
+ * Update Profile
+ * @route PATCH /api/auth/update-profile
+ */
+export const updateProfileController = catchAsync(async (req, res) => {
+  const updatedUser = await updateProfile(req.user.id, req.body);
+
+  return res.status(200).json(
+    apiResponse(true, "Profile updated successfully", updatedUser)
+  );
+});

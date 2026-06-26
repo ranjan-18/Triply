@@ -10,6 +10,10 @@ import env from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import tripRoutes from "./modules/trips/trip.routes.js";
 import expenseRoutes from "./modules/expenses/expense.routes.js";
+import settlementRoutes from "./modules/settlements/settlement.routes.js";
+import activityRoutes from "./modules/activities/activity.routes.js";
+import notificationRoutes from "./modules/notifications/notification.routes.js";
+import friendRoutes from "./modules/friends/friend.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -41,6 +45,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+/**
+ * Serve Uploads Statically
+ */
+import path from "path";
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 /**
  * Health Check Route
@@ -60,6 +69,10 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api", expenseRoutes);
+app.use("/api", settlementRoutes);
+app.use("/api", activityRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/friends", friendRoutes);
 
 /**
  * 404 Handler

@@ -18,7 +18,10 @@ const schema = Joi.object({
 
   JWT_REFRESH_SECRET: Joi.string().required(),
 
-  CLIENT_URL: Joi.string().required()
+  CLIENT_URL: Joi.string().required(),
+
+  // Add the Pexels API Key to validation
+  PEXELS_API_KEY: Joi.string().required()
 }).unknown();
 
 const { error, value } = schema.validate(process.env);

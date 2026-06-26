@@ -212,3 +212,30 @@ export const logoutUser = async (
 
   return {};
 };
+
+/**
+ * Update user profile
+ * @param {string} userId
+ * @param {Object} payload
+ */
+export const updateProfile = async (userId, payload) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (payload.name) user.name = payload.name;
+  if (payload.avatar) user.avatar = payload.avatar;
+
+  await user.save();
+
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    avatar: user.avatar,
+  };
+};
