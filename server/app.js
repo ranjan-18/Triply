@@ -28,7 +28,7 @@ app.use(helmet());
  */
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: [env.CLIENT_URL, "https://triply-t5t2.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
