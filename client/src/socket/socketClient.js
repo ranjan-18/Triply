@@ -2,7 +2,7 @@
 
 import { io } from "socket.io-client";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://triply2.onrender.com/api";
+const API_URL = import.meta.env.VITE_API_URL;
 const SOCKET_URL = API_URL.replace("/api", "");
 
 let socket = null;

@@ -152,7 +152,7 @@ const SettleUpCard = ({ tripId, baseCurrency = "INR" }) => {
                   </h4>
                   {settlement.proofImageUrl && (
                     <a 
-                      href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || "https://triply2.onrender.com"}${settlement.proofImageUrl}`} 
+                      href={`${import.meta.env.VITE_API_URL?.replace('/api', '')}${settlement.proofImageUrl}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-xs text-violet-600 hover:underline flex items-center gap-1 mt-1"

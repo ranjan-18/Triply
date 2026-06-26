@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 import toast from "react-hot-toast";
 import useAuthStore from "../../store/authStore";
 
@@ -29,8 +29,8 @@ const LoginForm = () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.post(
-        "https://triply2.onrender.com/api/auth/login",
+      const response = await axiosInstance.post(
+        "/auth/login",
         formData
       );
 
