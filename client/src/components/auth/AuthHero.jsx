@@ -1,6 +1,6 @@
 // src/components/auth/AuthHero.jsx
 
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/Logo.png";
 import HeroImage from "../../assets/Hero.png";
 
 import {
