@@ -11,7 +11,8 @@ const LiveFeed = ({ tripId }) => {
   const { data: initialActivities = [], isLoading } = useActivities(tripId);
   const queryClient = useQueryClient();
   
-  const [feed, setFeed] = useState([]);
+  const [newActivities, setNewActivities] = useState([]);
+  const feed = [...newActivities, ...initialActivities];
 
   // Setup socket
   useEffect(() => {
@@ -23,7 +24,7 @@ const LiveFeed = ({ tripId }) => {
 
     // When a new activity occurs, prepend it to the feed
     socket.on("NEW_ACTIVITY", (activity) => {
-      setFeed((prev) => [activity, ...prev]);
+      setNewActivities((prev) => [activity, ...prev]);
     });
 
     // General trip update triggers React Query refetches automatically
@@ -40,13 +41,6 @@ const LiveFeed = ({ tripId }) => {
       socket.off("TRIP_UPDATED");
     };
   }, [tripId, token, queryClient]);
-
-  // Load initial historical feed
-  useEffect(() => {
-    if (initialActivities.length > 0) {
-      setFeed(initialActivities);
-    }
-  }, [initialActivities]);
 
   if (isLoading) {
     return <div className="p-6 border rounded-[32px] bg-slate-50 h-[400px] animate-pulse"></div>;

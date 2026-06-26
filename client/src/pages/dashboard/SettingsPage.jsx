@@ -11,18 +11,9 @@ const SettingsPage = () => {
   const updateProfileMutation = useUpdateProfile();
   
   const [formData, setFormData] = useState({
-    name: "",
-    avatar: "",
+    name: user?.name || "",
+    avatar: user?.avatar || "",
   });
-
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        name: user.name || "",
-        avatar: user.avatar || "",
-      });
-    }
-  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

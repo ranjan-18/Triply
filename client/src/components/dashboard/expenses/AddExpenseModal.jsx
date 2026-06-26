@@ -134,13 +134,15 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
     e.preventDefault();
     let splitsPayload = [];
 
-    if (formData.splitType === "equal") {
+    let currentSplitType = formData.splitType;
+
+    if (currentSplitType === "equal") {
       splitsPayload = Object.entries(splitValues)
         .filter(([_, data]) => data.included)
         .map(([userId]) => ({ userId, value: 1 }));
         
       if (splitsPayload.length < trip.members.length) {
-        formData.splitType = "shares";
+        currentSplitType = "shares";
       }
     } else {
       splitsPayload = Object.entries(splitValues)
@@ -154,7 +156,7 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
       currency: formData.currency,
       date: formData.date,
       category: formData.category,
-      splitType: formData.splitType,
+      splitType: currentSplitType,
       splits: splitsPayload,
     };
 
