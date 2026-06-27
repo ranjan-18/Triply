@@ -2,6 +2,8 @@
 
 import Logo from "../../assets/Logo.png";
 import HeroImage from "../../assets/Hero.png";
+import HeroMobile from "../../assets/HeroMobile.png";
+import HeroTablet from "../../assets/HeroTablet.png";
 
 import {
   FaMagic,
@@ -45,24 +47,29 @@ const AuthHero = () => {
         from-violet-100
         via-white
         to-orange-50
-        px-6
-        lg:px-10
-        py-8
-        lg:py-8
+        pt-12
+        md:pt-16
+        pb-[180px]
+        md:pb-[200px]
+        lg:p-8
       "
     >
       {/* Background Glow */}
       <div
         className="
           absolute
-          top-0
-          left-0
-          w-[700px]
-          h-[700px]
+          top-[-10%]
+          left-[-10%]
+          w-[120%]
+          h-[120%]
           rounded-full
-          bg-violet-300/20
-          blur-[180px]
+          bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
+          from-violet-300/40
+          via-transparent
+          to-transparent
+          blur-[100px]
           animate-mesh-breathe
+          z-0
         "
       />
 
@@ -70,46 +77,25 @@ const AuthHero = () => {
       <div
         className="
           absolute
-          top-32
-          right-56
-          text-white
-          text-4xl
+          top-16
+          right-8
+          md:top-24
+          md:right-24
+          lg:top-32
+          lg:right-56
+          text-violet-400/60
+          text-3xl
+          md:text-5xl
+          lg:text-4xl
+          animate-pulse
         "
       >
         ✦
       </div>
 
-      {/* Hero Image */}
-      <img
-        src={HeroImage}
-        alt="Travel Group"
-        className="
-          relative
-          lg:absolute
-          mt-4
-          lg:mt-0
-          mb-6
-          lg:mb-0
-          lg:bottom-[-140px]
-          lg:left-1/2
-          lg:-translate-x-1/2
-          w-full
-          lg:w-[105%]
-          max-w-md
-          lg:max-w-5xl
-          object-contain
-          pointer-events-none
-          select-none
-          z-0
-          opacity-100
-          mx-auto
-          animate-fade-in-up
-          delay-300
-        "
-      />
 
       {/* Content */}
-      <div className="relative z-10 w-full flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center lg:items-start text-center lg:text-left px-6 md:px-12 lg:px-0">
         {/* Logo */}
         <div className="flex items-center gap-4 mb-6 animate-fade-in-up">
           <img
@@ -126,9 +112,10 @@ const AuthHero = () => {
         <h2
           className="
             text-4xl
+            md:text-6xl
             lg:text-5xl
             font-bold
-            leading-[1.05]
+            leading-[1.1]
             text-slate-900
             max-w-3xl
             animate-fade-in-up
@@ -146,11 +133,13 @@ const AuthHero = () => {
         {/* Description */}
         <p
           className="
-            mt-3
+            mt-4
             text-lg
+            md:text-xl
             leading-relaxed
             text-slate-600
             max-w-xl
+            md:max-w-2xl
             animate-fade-in-up
             delay-200
           "
@@ -197,7 +186,70 @@ const AuthHero = () => {
         </div>
       </div>
 
-      {/* Hero Image - Absolute on desktop, but rendered right after text in DOM (Wait, if it's absolute, it doesn't matter where it is. But on mobile we want it at the top). Let's put it at the very top of the parent div. */}
+      {/* Hero Image - Responsive setup for mobile, tablet, and desktop */}
+      <div className="relative w-full flex-1 flex items-center justify-center lg:block mt-8 md:mt-12 lg:mt-0 z-10 animate-float px-6 lg:px-0">
+        {/* Mobile & Tablet image glow */}
+        <div className="absolute inset-0 bg-violet-400/20 blur-3xl rounded-full lg:hidden scale-[0.8] md:scale-[0.9]" />
+        
+        {/* Mobile Image */}
+        <img
+          src={HeroMobile}
+          alt="Travel Group Mobile"
+          className="
+            block md:hidden
+            w-full
+            object-cover
+            pointer-events-none
+            select-none
+            mx-auto
+            drop-shadow-[0_20px_50px_rgba(124,58,237,0.3)]
+            animate-fade-in-up
+            delay-300
+            rounded-3xl
+          "
+        />
+
+        {/* Tablet Image */}
+        <img
+          src={HeroTablet}
+          alt="Travel Group Tablet"
+          className="
+            hidden md:block lg:hidden
+            w-full
+            max-w-3xl
+            object-cover
+            pointer-events-none
+            select-none
+            mx-auto
+            drop-shadow-[0_20px_50px_rgba(124,58,237,0.3)]
+            animate-fade-in-up
+            delay-300
+            rounded-3xl
+          "
+        />
+
+        {/* Desktop Image */}
+        <img
+          src={HeroImage}
+          alt="Travel Group Desktop"
+          className="
+            hidden lg:block
+            absolute
+            bottom-[-140px]
+            left-1/2
+            -translate-x-1/2
+            w-[105%]
+            max-w-5xl
+            object-contain
+            pointer-events-none
+            select-none
+            mx-auto
+            drop-shadow-[0_20px_50px_rgba(124,58,237,0.3)]
+            animate-fade-in-up
+            delay-300
+          "
+        />
+      </div>
     </div>
   );
 };
