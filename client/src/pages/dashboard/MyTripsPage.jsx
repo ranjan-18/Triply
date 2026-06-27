@@ -67,13 +67,6 @@ const MyTripsPage = () => {
             </h1>
             <p className="text-slate-500 mt-2 text-lg">Manage and view all your travel adventures</p>
           </div>
-          
-          <button 
-            onClick={() => setOpenCreateTrip(true)}
-            className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-semibold transition flex items-center gap-2 shadow-md w-fit"
-          >
-            <FaPlus /> Create Trip
-          </button>
         </div>
 
         {/* Trips Grid */}

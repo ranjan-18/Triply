@@ -78,32 +78,32 @@ const GlobalExpensesPage = () => {
                 }
 
                 return (
-                  <div key={expense._id} className="p-6 flex items-center justify-between hover:bg-slate-50 transition">
-                    <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-sm border border-blue-100">
+                  <div key={expense._id} className="p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0 hover:bg-slate-50 transition">
+                    <div className="flex items-center gap-4 md:gap-5 w-full">
+                      <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-sm border border-blue-100">
                         {getCategoryIcon(expense.category)}
                       </div>
-                      <div>
-                        <h4 className="text-lg font-bold text-slate-800">{expense.title}</h4>
-                        <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-base md:text-lg font-bold text-slate-800 truncate">{expense.title}</h4>
+                        <div className="flex flex-wrap items-center gap-1 md:gap-2 mt-1 text-xs md:text-sm text-slate-500">
                           <span>{moment(expense.date).format("MMM DD, YYYY")}</span>
-                          <span>•</span>
+                          <span className="hidden md:inline">•</span>
                           <span className="flex items-center gap-1">
-                            Paid by <b className="text-slate-700">{isPayer ? "You" : expense.paidBy.name}</b>
+                            Paid by <b className="text-slate-700 truncate max-w-[100px]">{isPayer ? "You" : expense.paidBy.name}</b>
                           </span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="text-right flex items-center gap-6">
-                      <div>
-                        <p className={`font-bold ${amountColor}`}>{displayAmountText}</p>
+                    <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 w-full md:w-auto pt-3 md:pt-0 border-t border-slate-100 md:border-t-0">
+                      <div className="text-left md:text-right">
+                        <p className={`font-bold text-sm md:text-base ${amountColor}`}>{displayAmountText}</p>
                         <p className="text-xs text-slate-400 mt-1">Total: {expense.currency} {expense.amount.toFixed(2)}</p>
                       </div>
                       
                       <Link 
-                        to={`/dashboard/trips/${expense.tripId?._id}`}
-                        className="text-sm font-semibold text-violet-600 bg-violet-50 px-4 py-2 rounded-xl hover:bg-violet-100 transition whitespace-nowrap"
+                        to={`/trips/${expense.tripId?._id || expense.tripId}`}
+                        className="shrink-0 text-sm font-semibold text-violet-600 bg-violet-50 px-4 py-2 rounded-xl hover:bg-violet-100 transition whitespace-nowrap"
                       >
                         View Trip
                       </Link>

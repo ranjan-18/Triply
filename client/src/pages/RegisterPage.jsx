@@ -1,5 +1,4 @@
-import AuthLayout from "../components/auth/AuthLayout";
-import AuthHero from "../components/auth/AuthHero";
+// Removed AuthLayout and AuthHero imports
 import AuthCard from "../components/auth/AuthCard";
 import AuthTabs from "../components/auth/AuthTabs";
 import RegisterForm from "../components/auth/RegisterForm";
@@ -8,39 +7,34 @@ import AuthFooter from "../components/auth/AuthFooter";
 
 const RegisterPage = () => {
   return (
-    <AuthLayout
-      left={<AuthHero />}
-      right={
-        <AuthCard>
-          <div className="max-w-md mx-auto">
-            <p className="text-violet-600 font-medium">
-              🎉 Welcome to Triply!
-            </p>
+    <AuthCard>
+      <div className="max-w-md mx-auto">
+        <p className="text-violet-600 font-medium">
+          🎉 Welcome to Triply!
+        </p>
 
-            <h1 className="text-3xl font-bold">
-              Create your account
-            </h1>
+        <h1 className="text-3xl font-bold">
+          Create your account
+        </h1>
 
-            <p className="mt-2 text-slate-500">
-              Already have an account?
-              <span className="ml-2 text-violet-600 cursor-pointer">
-                Sign in instead
-              </span>
-            </p>
+        <p className="mt-2 text-slate-500">
+          Already have an account?
+          <span className="ml-2 text-violet-600 cursor-pointer">
+            Sign in instead
+          </span>
+        </p>
 
-            <div className="mt-4">
-              <AuthTabs />
-            </div>
+        <div className="mt-4">
+          <AuthTabs />
+        </div>
 
-            <RegisterForm />
+        <RegisterForm />
 
-        
+    
 
-            <AuthFooter />
-          </div>
-        </AuthCard>
-      }
-    />
+        <AuthFooter />
+      </div>
+    </AuthCard>
   );
 };
 

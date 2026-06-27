@@ -51,10 +51,12 @@ const AuthHero = () => {
         md:pt-16
         pb-[180px]
         md:pb-[200px]
-        lg:p-8
+        lg:px-10
+        lg:py-8
       "
     >
       {/* Background Glow */}
+      {/* Background Glow - Mobile/Tablet */}
       <div
         className="
           absolute
@@ -68,6 +70,23 @@ const AuthHero = () => {
           via-transparent
           to-transparent
           blur-[100px]
+          animate-mesh-breathe
+          z-0
+          lg:hidden
+        "
+      />
+      {/* Background Glow - Desktop */}
+      <div
+        className="
+          hidden lg:block
+          absolute
+          top-0
+          left-0
+          w-[700px]
+          h-[700px]
+          rounded-full
+          bg-violet-300/20
+          blur-[180px]
           animate-mesh-breathe
           z-0
         "
@@ -84,10 +103,12 @@ const AuthHero = () => {
           lg:top-32
           lg:right-56
           text-violet-400/60
+          lg:text-white
           text-3xl
           md:text-5xl
           lg:text-4xl
           animate-pulse
+          lg:animate-none
         "
       >
         ✦
@@ -116,6 +137,7 @@ const AuthHero = () => {
             lg:text-5xl
             font-bold
             leading-[1.1]
+            lg:leading-[1.05]
             text-slate-900
             max-w-3xl
             animate-fade-in-up
@@ -134,12 +156,15 @@ const AuthHero = () => {
         <p
           className="
             mt-4
+            lg:mt-3
             text-lg
             md:text-xl
+            lg:text-lg
             leading-relaxed
             text-slate-600
             max-w-xl
             md:max-w-2xl
+            lg:max-w-xl
             animate-fade-in-up
             delay-200
           "
@@ -187,7 +212,7 @@ const AuthHero = () => {
       </div>
 
       {/* Hero Image - Responsive setup for mobile, tablet, and desktop */}
-      <div className="relative w-full flex-1 flex items-center justify-center lg:block mt-8 md:mt-12 lg:mt-0 z-10 animate-float px-6 lg:px-0">
+      <div className="relative w-full flex-1 flex items-center justify-center lg:block mt-8 md:mt-12 lg:mt-0 z-10 animate-float lg:animate-none px-6 lg:px-0">
         {/* Mobile & Tablet image glow */}
         <div className="absolute inset-0 bg-violet-400/20 blur-3xl rounded-full lg:hidden scale-[0.8] md:scale-[0.9]" />
         
@@ -228,28 +253,30 @@ const AuthHero = () => {
           "
         />
 
-        {/* Desktop Image */}
-        <img
-          src={HeroImage}
-          alt="Travel Group Desktop"
-          className="
-            hidden lg:block
-            absolute
-            bottom-[-140px]
-            left-1/2
-            -translate-x-1/2
-            w-[105%]
-            max-w-5xl
-            object-contain
-            pointer-events-none
-            select-none
-            mx-auto
-            drop-shadow-[0_20px_50px_rgba(124,58,237,0.3)]
-            animate-fade-in-up
-            delay-300
-          "
-        />
       </div>
+
+      {/* Desktop Image */}
+      <img
+        src={HeroImage}
+        alt="Travel Group"
+        className="
+          hidden lg:block
+          absolute
+          bottom-[-140px]
+          left-1/2
+          -translate-x-1/2
+          w-[105%]
+          max-w-5xl
+          object-contain
+          pointer-events-none
+          select-none
+          z-0
+          opacity-100
+          mx-auto
+          animate-fade-in-up
+          delay-300
+        "
+      />
     </div>
   );
 };

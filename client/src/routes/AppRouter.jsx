@@ -7,6 +7,7 @@ import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 
+import AuthLayout from "../components/auth/AuthLayout";
 import PrivateRoute from "./PrivateRoute";
 import TripDetailsPage from "../pages/TripDetailsPage";
 import GlobalExpensesPage from "../pages/dashboard/GlobalExpensesPage";
@@ -20,15 +21,16 @@ import MyTripsPage from "../pages/dashboard/MyTripsPage";
 const AppRouter = () => {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<RegisterPage />}
-      />
-
-      <Route
-        path="/login"
-        element={<LoginPage />}
-      />
+      <Route element={<AuthLayout />}>
+        <Route
+          path="/"
+          element={<RegisterPage />}
+        />
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+      </Route>
 
       <Route
         path="/dashboard"

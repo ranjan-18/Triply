@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import AuthHero from "./AuthHero";
 
-const AuthLayout = ({ left, right }) => {
+const AuthLayout = () => {
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const AuthLayout = ({ left, right }) => {
     <div className="min-h-screen grid lg:grid-cols-[52%_48%] relative">
       {/* Left side: Hero Image. Always visible on desktop. On mobile, it's the main screen. */}
       <div className="relative w-full min-h-screen lg:min-h-0 flex flex-col">
-        {left}
+        <AuthHero />
         
         {/* Mobile Action Buttons */}
         <div className="absolute bottom-8 left-0 right-0 px-6 flex flex-col gap-4 lg:hidden z-20 animate-fade-in-up delay-400">
@@ -40,7 +41,7 @@ const AuthLayout = ({ left, right }) => {
 
       {/* Right side: Form (Desktop always visible) */}
       <div className="hidden lg:block h-full">
-        {right}
+        <Outlet />
       </div>
 
       {/* Mobile Modal */}
@@ -65,7 +66,7 @@ const AuthLayout = ({ left, right }) => {
             </div>
             {/* The right component contains AuthCard which has p-8, so it formats nicely */}
             <div className="-mt-4">
-              {right}
+              <Outlet />
             </div>
           </div>
         </div>

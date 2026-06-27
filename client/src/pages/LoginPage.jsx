@@ -1,5 +1,4 @@
-import AuthLayout from "../components/auth/AuthLayout";
-import AuthHero from "../components/auth/AuthHero";
+// Removed AuthLayout and AuthHero imports
 import AuthCard from "../components/auth/AuthCard";
 
 import AuthTabs from "../components/auth/AuthTabs";
@@ -9,42 +8,37 @@ import AuthFooter from "../components/auth/AuthFooter";
 
 const LoginPage = () => {
   return (
-    <AuthLayout
-      left={<AuthHero />}
-      right={
-        <AuthCard>
-          <div className="max-w-md mx-auto">
-            {/* Welcome Badge */}
-            <p className="text-violet-600 font-medium mb-3">
-              👋 Welcome Back!
-            </p>
+    <AuthCard>
+      <div className="max-w-md mx-auto">
+        {/* Welcome Badge */}
+        <p className="text-violet-600 font-medium mb-3">
+          👋 Welcome Back!
+        </p>
 
-            {/* Heading */}
-            <h1 className="text-5xl font-bold text-slate-900">
-              Sign in
-            </h1>
+        {/* Heading */}
+        <h1 className="text-5xl font-bold text-slate-900">
+          Sign in
+        </h1>
 
-            <p className="mt-3 text-slate-500">
-              Access your trips and expenses.
-            </p>
+        <p className="mt-3 text-slate-500">
+          Access your trips and expenses.
+        </p>
 
-            {/* Tabs */}
-            <div className="mt-8">
-              <AuthTabs />
-            </div>
+        {/* Tabs */}
+        <div className="mt-8">
+          <AuthTabs />
+        </div>
 
-            {/* Form */}
-            <LoginForm />
+        {/* Form */}
+        <LoginForm />
 
-            {/* Social Login */}
-            
+        {/* Social Login */}
+        
 
-            {/* Footer */}
-            <AuthFooter />
-          </div>
-        </AuthCard>
-      }
-    />
+        {/* Footer */}
+        <AuthFooter />
+      </div>
+    </AuthCard>
   );
 };
 
