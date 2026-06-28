@@ -4,7 +4,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "./auth.model.js";
+import Otp from "./otp.model.js";
 import env from "../../config/env.js";
+import { sendOtpEmail } from "../../utils/emailService.js";
 
 import {
   generateAccessToken,
@@ -31,10 +33,47 @@ export const registerUser = async (payload) => {
     throw error;
   }
 
-  const passwordHash = await bcrypt.hash(
-    password,
-    10
-  );
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  // Generate 6-digit OTP
+  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Remove any existing OTP for this email
+  await Otp.deleteMany({ email: email.toLowerCase() });
+
+  await Otp.create({
+    email: email.toLowerCase(),
+    otp: otpCode,
+    userData: { name, passwordHash },
+  });
+
+  await sendOtpEmail(email.toLowerCase(), otpCode);
+
+  return {
+    message: "OTP sent successfully to your email.",
+  };
+};
+
+/**
+ * Verify OTP and create user
+ * @param {Object} payload
+ * @returns {Promise<Object>}
+ */
+export const verifyOtpUser = async (payload) => {
+  const { email, otp } = payload;
+
+  const otpRecord = await Otp.findOne({
+    email: email.toLowerCase(),
+    otp,
+  });
+
+  if (!otpRecord) {
+    const error = new Error("Invalid or expired OTP");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const { name, passwordHash } = otpRecord.userData;
 
   const user = await User.create({
     name,
@@ -42,16 +81,12 @@ export const registerUser = async (payload) => {
     passwordHash,
   });
 
-  const accessToken = generateAccessToken(
-    user._id.toString()
-  );
+  await Otp.deleteMany({ email: email.toLowerCase() });
 
-  const refreshToken = generateRefreshToken(
-    user._id.toString()
-  );
+  const accessToken = generateAccessToken(user._id.toString());
+  const refreshToken = generateRefreshToken(user._id.toString());
 
   user.refreshToken = refreshToken;
-
   await user.save();
 
   return {

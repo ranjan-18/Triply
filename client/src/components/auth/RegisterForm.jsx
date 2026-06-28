@@ -18,30 +18,25 @@ const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  
+  const [step, setStep] = useState(1);
+  const [otp, setOtp] = useState("");
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
-
       const response = await axiosInstance.post(
         "/auth/register",
         formData
       );
-
-      const { user, accessToken, refreshToken } = response.data.data;
-
-      // Persist auth in Zustand (also written to localStorage via persist middleware)
-      setAuth({ user, accessToken, refreshToken });
-
-      toast.success("Account created successfully! 🎉");
-
-      navigate("/dashboard");
+      toast.success(response.data.message || "OTP sent to your email!");
+      setStep(2);
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Registration failed"
@@ -51,8 +46,76 @@ const RegisterForm = () => {
     }
   };
 
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      const response = await axiosInstance.post(
+        "/auth/verify-otp",
+        { email: formData.email, otp }
+      );
+
+      const { user, accessToken, refreshToken } = response.data.data;
+      setAuth({ user, accessToken, refreshToken });
+      toast.success("Account created successfully! 🎉");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Invalid or expired OTP"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (step === 2) {
+    return (
+      <form className="space-y-5 mt-6 animate-fade-in" onSubmit={handleVerifyOtp}>
+        <div className="text-center mb-6">
+          <p className="text-sm text-slate-500">
+            We've sent a 6-digit verification code to
+            <br />
+            <span className="font-semibold text-slate-800">{formData.email}</span>
+          </p>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-slate-700">
+            Enter OTP
+          </label>
+          <input
+            type="text"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="123456"
+            maxLength={6}
+            required
+            className="w-full px-4 py-4 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-violet-500 transition text-center tracking-widest text-lg font-semibold"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading || otp.length !== 6}
+          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 to-purple-500 text-white font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50"
+        >
+          {isLoading ? "Verifying..." : "Verify OTP →"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setStep(1)}
+          className="w-full py-2 text-sm text-slate-500 hover:text-violet-600 transition"
+        >
+          Change Email Address
+        </button>
+      </form>
+    );
+  }
+
   return (
-    <form className="space-y-5 mt-6" onSubmit={handleSubmit}>
+    <form className="space-y-5 mt-6 animate-fade-in" onSubmit={handleRegister}>
       {/* Name */}
       <div>
         <label className="block mb-2 text-sm font-medium text-slate-700">

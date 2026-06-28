@@ -10,10 +10,12 @@ import {
   registerSchema,
   loginSchema,
   refreshSchema,
+  verifyOtpSchema,
 } from "./auth.validation.js";
 
 import {
   register,
+  verifyOtp,
   login,
   refresh,
   logout,
@@ -29,6 +31,15 @@ router.post(
   "/register",
   validate(registerSchema),
   register
+);
+
+/**
+ * POST /api/auth/verify-otp
+ */
+router.post(
+  "/verify-otp",
+  validate(verifyOtpSchema),
+  verifyOtp
 );
 
 /**

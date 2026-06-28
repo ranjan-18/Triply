@@ -9,6 +9,7 @@ import {
   refreshTokens,
   logoutUser,
   updateProfile,
+  verifyOtpUser,
 } from "./auth.service.js";
 
 /**
@@ -21,10 +22,30 @@ export const register = catchAsync(
       req.body
     );
 
+    return res.status(200).json(
+      apiResponse(
+        true,
+        result.message,
+        null
+      )
+    );
+  }
+);
+
+/**
+ * Verify OTP
+ * @route POST /api/auth/verify-otp
+ */
+export const verifyOtp = catchAsync(
+  async (req, res) => {
+    const result = await verifyOtpUser(
+      req.body
+    );
+
     return res.status(201).json(
       apiResponse(
         true,
-        "User registered successfully",
+        "User registered and verified successfully",
         result
       )
     );
