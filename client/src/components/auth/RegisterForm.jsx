@@ -105,7 +105,11 @@ const RegisterForm = () => {
 
         <button
           type="button"
-          onClick={() => setStep(1)}
+          onClick={(e) => {
+            e.preventDefault();
+            setStep(1);
+            setOtp("");
+          }}
           className="w-full py-2 text-sm text-slate-500 hover:text-violet-600 transition"
         >
           Change Email Address
