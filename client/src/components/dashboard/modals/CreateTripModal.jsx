@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useCreateTrip } from "../../../hooks/useCreateTrip";
-import { useFriends } from "../../../hooks/useFriends";
+import { useGetFriends } from "../../../hooks/useFriends";
 import { FaTimes, FaGlobe, FaRupeeSign, FaSuitcase, FaUsers } from "react-icons/fa";
 
 const CreateTripModal = ({ isOpen, onClose }) => {
   const createTripMutation = useCreateTrip();
-  const { data: friendsData = [] } = useFriends();
+  const { data: friendsData = [] } = useGetFriends();
 
   // Handle both possible structures of friendsData depending on useFriends implementation
   const friendsList = friendsData?.data?.friends || friendsData?.friends || [];
