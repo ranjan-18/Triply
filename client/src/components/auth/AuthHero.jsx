@@ -212,7 +212,7 @@ const AuthHero = () => {
       </div>
 
       {/* Hero Image - Responsive setup for mobile, tablet, and desktop */}
-      <div className="relative w-full flex-1 flex items-center justify-center lg:block mt-8 md:mt-12 lg:mt-0 z-10 animate-float lg:animate-none px-6 lg:px-0">
+      <div className="relative w-full flex-1 flex lg:hidden items-center justify-center mt-8 md:mt-12 z-10 animate-float px-6 lg:px-0">
         {/* Mobile & Tablet image glow */}
         <div className="absolute inset-0 bg-violet-400/20 blur-3xl rounded-full lg:hidden scale-[0.8] md:scale-[0.9]" />
         

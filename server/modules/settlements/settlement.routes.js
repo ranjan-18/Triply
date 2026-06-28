@@ -48,7 +48,7 @@ router.get(
  * Get all Global Settlements for a User
  */
 router.get(
-  "/",
+  "/settlements",
   authMiddleware,
   getGlobalSettlementsController
 );
