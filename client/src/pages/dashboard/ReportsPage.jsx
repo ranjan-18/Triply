@@ -25,12 +25,14 @@ const ReportsPage = () => {
 
   // Aggregate Data
   const totalSpent = expenses.reduce((sum, exp) => {
+    if (exp.isSettlement) return sum;
     // Only count the user's portion of the expense across all trips
     const userSplit = exp.splits.find(s => s.userId._id === user?.id);
     return sum + (userSplit ? userSplit.owedAmount : 0);
   }, 0);
 
   const categoryTotals = expenses.reduce((acc, exp) => {
+    if (exp.isSettlement) return acc;
     const userSplit = exp.splits.find(s => s.userId._id === user?.id);
     if (userSplit) {
       acc[exp.category] = (acc[exp.category] || 0) + userSplit.owedAmount;
@@ -45,6 +47,7 @@ const ReportsPage = () => {
 
   // Get last 6 months data
   const monthlyTotals = expenses.reduce((acc, exp) => {
+    if (exp.isSettlement) return acc;
     const userSplit = exp.splits.find(s => s.userId._id === user?.id);
     if (userSplit) {
       const monthYear = new Date(exp.date).toLocaleString('default', { month: 'short', year: '2-digit' });

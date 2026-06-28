@@ -1,7 +1,8 @@
 // server/modules/activities/activity.service.js
 
 import Activity from "./activity.model.js";
-import { emitToTrip } from "../../socket.js";
+import Trip from "../trips/trip.model.js";
+import { emitToTrip, emitToUser } from "../../socket.js";
 
 /**
  * Log an activity to the database and emit it via Socket.io to the trip room.
@@ -25,6 +26,14 @@ export const logAndEmitActivity = async ({ tripId, userId, action, message, meta
     
     // Also emit a general update trigger so clients know to invalidate queries
     emitToTrip(tripId, "TRIP_UPDATED", { action, message });
+
+    // Look up the trip to notify all members globally
+    const trip = await Trip.findById(tripId).select("members");
+    if (trip && trip.members) {
+      trip.members.forEach(member => {
+        emitToUser(member.userId, "GLOBAL_DATA_UPDATED", { action, message });
+      });
+    }
 
     return populatedActivity;
   } catch (error) {

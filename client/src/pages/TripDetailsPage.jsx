@@ -38,8 +38,8 @@ const TripDetailsPage = () => {
   const { data: expenses = [] } = useExpenses(tripId);
   const { data: balances = [] } = useBalances(tripId);
 
-  // Total spent = sum of all expense amounts
-  const totalSpent = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+  // Total spent = sum of all non-settlement expense amounts
+  const totalSpent = expenses.reduce((sum, e) => !e.isSettlement ? sum + (e.amount || 0) : sum, 0);
 
   // Find the current user's balance entry.
   // The balance userId is a MongoDB ObjectId string.

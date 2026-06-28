@@ -118,33 +118,33 @@ const GlobalSettlementsPage = () => {
                     });
 
                     return (
-                    <div key={idx} className="p-6 flex items-center justify-between hover:bg-slate-50 transition">
-                      <div className="flex items-center gap-5">
-                        <div className="flex items-center -space-x-4">
-                          <div className="w-12 h-12 rounded-full border-2 border-white relative z-10 bg-red-100 text-red-600 flex items-center justify-center font-bold">
+                    <div key={idx} className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 hover:bg-slate-50 transition">
+                      <div className="flex items-center gap-4 sm:gap-5 w-full">
+                        <div className="flex items-center -space-x-4 shrink-0">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white relative z-10 bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm sm:text-base">
                             {item.transaction.from.name.charAt(0)}
                           </div>
-                          <div className="w-12 h-12 rounded-full border-2 border-white relative z-0 bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white relative z-0 bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm sm:text-base">
                             {item.transaction.to.name.charAt(0)}
                           </div>
                         </div>
-                        <div>
-                          <h4 className="text-lg font-bold text-slate-800">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-base sm:text-lg font-bold text-slate-800 truncate">
                             {item.transaction.from.name} needs to pay {item.transaction.to.name}
                           </h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-xs px-2 py-1 rounded-md font-bold bg-orange-100 text-orange-700 flex items-center gap-1">
+                          <div className="flex items-center gap-2 sm:gap-3 mt-1 flex-wrap">
+                            <span className="text-[10px] sm:text-xs px-2 py-1 rounded-md font-bold bg-orange-100 text-orange-700 flex items-center gap-1 shrink-0">
                               <FaClock /> Pending
                             </span>
-                            <Link to={`/dashboard/trips/${item.tripId}`} className="text-sm text-violet-600 hover:underline">
+                            <Link to={`/dashboard/trips/${item.tripId}`} className="text-xs sm:text-sm text-violet-600 hover:underline truncate max-w-full">
                               in {item.tripName}
                             </Link>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="text-right flex flex-col items-end gap-2">
-                        <h3 className="text-2xl font-bold text-slate-800">
+                      <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100 gap-2">
+                        <h3 className="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">
                           {item.baseCurrency} {item.transaction.amount.toFixed(2)}
                         </h3>
                         
@@ -153,12 +153,12 @@ const GlobalSettlementsPage = () => {
                             <button 
                               onClick={() => handleApprove(pendingSettlement)}
                               disabled={approveMutation.isPending}
-                              className="bg-emerald-500 text-white font-semibold rounded-xl px-5 py-2 hover:bg-emerald-600 transition shadow-md disabled:opacity-50"
+                              className="bg-emerald-500 text-white text-sm sm:text-base font-semibold rounded-xl px-4 py-2 hover:bg-emerald-600 transition shadow-md disabled:opacity-50 whitespace-nowrap"
                             >
-                              Approve Payment
+                              Approve
                             </button>
                           ) : (
-                            <span className="text-sm font-semibold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
+                            <span className="text-xs sm:text-sm font-semibold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 whitespace-nowrap">
                               Awaiting Approval
                             </span>
                           )
@@ -169,7 +169,7 @@ const GlobalSettlementsPage = () => {
                                 setSelectedTransaction(item);
                                 setPaymentAmount(item.transaction.amount);
                               }}
-                              className="bg-violet-600 text-white font-semibold rounded-xl px-5 py-2 hover:bg-violet-700 transition shadow-md"
+                              className="bg-violet-600 text-white text-sm sm:text-base font-semibold rounded-xl px-4 py-2 hover:bg-violet-700 transition shadow-md whitespace-nowrap"
                             >
                               Record Payment
                             </button>
@@ -199,31 +199,31 @@ const GlobalSettlementsPage = () => {
                     const isPending = settlement.status === "Pending";
 
                     return (
-                      <div key={settlement._id} className="p-6 flex items-center justify-between hover:bg-slate-50 transition">
-                        <div className="flex items-center gap-5">
-                          <div className="flex items-center -space-x-4">
+                      <div key={settlement._id} className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 hover:bg-slate-50 transition">
+                        <div className="flex items-center gap-4 sm:gap-5 w-full">
+                          <div className="flex items-center -space-x-4 shrink-0">
                             <img 
                               src={settlement.paidBy.avatar || `https://ui-avatars.com/api/?name=${settlement.paidBy.name}&background=random`} 
                               alt="Payer" 
-                              className="w-12 h-12 rounded-full border-2 border-white relative z-10"
+                              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white relative z-10"
                             />
                             <img 
                               src={settlement.paidTo.avatar || `https://ui-avatars.com/api/?name=${settlement.paidTo.name}&background=random`} 
                               alt="Receiver" 
-                              className="w-12 h-12 rounded-full border-2 border-white relative z-0"
+                              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white relative z-0"
                             />
                           </div>
-                          <div>
-                            <h4 className="text-lg font-bold text-slate-800">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-base sm:text-lg font-bold text-slate-800 truncate">
                               {settlement.paidBy.name} paid {settlement.paidTo.name}
                             </h4>
-                            <div className="flex items-center gap-3 mt-1">
-                              <span className={`text-xs px-2 py-1 rounded-md font-bold flex items-center gap-1 ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
+                              <span className={`text-[10px] sm:text-xs px-2 py-1 rounded-md font-bold flex items-center gap-1 shrink-0 ${isPending ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700'}`}>
                                 {isPending ? <><FaClock /> Pending</> : <><FaCheckCircle /> Settled</>}
                               </span>
-                              <span className="text-sm text-slate-500">{moment(settlement.createdAt).fromNow()}</span>
+                              <span className="text-[10px] sm:text-sm text-slate-500 shrink-0">{moment(settlement.createdAt).fromNow()}</span>
                               {settlement.tripId && (
-                                <Link to={`/dashboard/trips/${settlement.tripId._id}`} className="text-sm text-violet-600 hover:underline">
+                                <Link to={`/dashboard/trips/${settlement.tripId._id}`} className="text-[10px] sm:text-sm text-violet-600 hover:underline truncate max-w-full">
                                   in {settlement.tripId.name}
                                 </Link>
                               )}
@@ -231,9 +231,9 @@ const GlobalSettlementsPage = () => {
                           </div>
                         </div>
                         
-                        <div className="text-right flex items-center gap-6">
-                          <div className="flex flex-col items-end">
-                            <h3 className="text-2xl font-bold text-slate-800">
+                        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100 gap-2">
+                          <div className="flex flex-col items-start sm:items-end shrink-0">
+                            <h3 className="text-xl sm:text-2xl font-bold text-slate-800">
                               {settlement.currency} {settlement.amount.toFixed(2)}
                             </h3>
                             {settlement.proofImageUrl && (
@@ -241,9 +241,9 @@ const GlobalSettlementsPage = () => {
                                 href={`${import.meta.env.VITE_API_URL?.replace('/api', '')}${settlement.proofImageUrl}`} 
                                 target="_blank" 
                                 rel="noreferrer"
-                                className="text-xs text-violet-600 hover:underline flex items-center gap-1 mt-1"
+                                className="text-[10px] sm:text-xs text-violet-600 hover:underline flex items-center gap-1 mt-1"
                               >
-                                <FaCamera /> View Receipt
+                                <FaCamera /> Receipt
                               </a>
                             )}
                           </div>
@@ -252,7 +252,7 @@ const GlobalSettlementsPage = () => {
                             <button 
                               onClick={() => handleApprove(settlement)}
                               disabled={approveMutation.isPending}
-                              className="bg-emerald-500 text-white font-semibold rounded-xl px-5 py-2 hover:bg-emerald-600 transition shadow-md disabled:opacity-50"
+                              className="bg-emerald-500 text-white text-sm sm:text-base font-semibold rounded-xl px-4 py-2 hover:bg-emerald-600 transition shadow-md disabled:opacity-50 whitespace-nowrap"
                             >
                               Approve
                             </button>

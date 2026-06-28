@@ -41,12 +41,22 @@ export const useGlobalSocket = () => {
       queryClient.invalidateQueries({ queryKey: ["friends"] });
     });
 
+    socket.on("GLOBAL_DATA_UPDATED", () => {
+      // Invalidate global queries when activity occurs in any trip the user is part of
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+      queryClient.invalidateQueries({ queryKey: ["globalExpenses"] });
+      queryClient.invalidateQueries({ queryKey: ["globalSettlements"] });
+      queryClient.invalidateQueries({ queryKey: ["globalOptimizedSettlements"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+    });
+
     return () => {
       // Don't disconnect here because other components (like LiveFeed) rely on the same socket instance
       // We just clean up the listeners
       socket.off("NEW_NOTIFICATION");
       socket.off("FRIEND_REQUEST_RECEIVED");
       socket.off("FRIEND_REQUEST_ACCEPTED");
+      socket.off("GLOBAL_DATA_UPDATED");
     };
   }, [token, user, queryClient]);
 };
