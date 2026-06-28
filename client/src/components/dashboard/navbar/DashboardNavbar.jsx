@@ -71,40 +71,53 @@ const DashboardNavbar = ({
       shadow-[0_20px_50px_rgba(124,58,237,0.05)]
     "
     >
-      {/* Left */}
-      <div className="flex items-center gap-4 w-full lg:w-auto">
-        <button 
-          onClick={onMenuClick}
-          className="lg:hidden w-12 h-12 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 transition"
-        >
-          <FaBars size={20} />
-        </button>
-        <div>
-          <h1
-            className="
-            text-2xl
-            lg:text-3xl
-            font-extrabold
-            text-transparent
-            bg-clip-text
-            bg-gradient-to-r
-            from-slate-900
-            to-slate-700
-            tracking-tight
-          "
-          >
+      {/* Left & Mobile Content */}
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4 w-full lg:w-auto">
+        
+        {/* Salutation text */}
+        <div className="mb-2 lg:mb-0">
+          <h1 className="text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 tracking-tight">
             {salutation}, {userName}! <span className="inline-block animate-bounce origin-bottom-right">👋</span>
           </h1>
-
           <p className="text-slate-500 mt-1 text-sm lg:text-base">
-            Here's what's happening with
-            your trips today.
+            Here's what's happening with your trips today.
           </p>
+        </div>
+
+        {/* Mobile Action Buttons: Menu, Create Trip, Notif */}
+        <div className="flex lg:hidden items-center gap-3 w-full">
+          <button 
+            onClick={onMenuClick}
+            className="w-11 h-11 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-200 transition shrink-0"
+          >
+            <FaBars size={18} />
+          </button>
+          
+          {/* Mobile Create Trip */}
+          <button
+            onClick={onCreateTrip}
+            className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-500 text-white px-4 py-2.5 rounded-xl font-medium shadow-md flex-1 justify-center"
+          >
+            <FaPlus size={14} /> Create
+          </button>
+
+          {/* Mobile Notification */}
+          <Link
+            to="/dashboard/notifications"
+            className="relative w-11 h-11 rounded-xl border border-slate-200 bg-white/80 flex items-center justify-center hover:bg-slate-50 transition shadow-sm shrink-0"
+          >
+            <FaBell className="text-slate-600" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                {unreadCount}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
 
-      {/* Right */}
-      <div className="flex items-center justify-between gap-4 w-full lg:w-auto mt-4 lg:mt-0">
+      {/* Right (Desktop Only) */}
+      <div className="hidden lg:flex items-center justify-between gap-4 w-full lg:w-auto mt-4 lg:mt-0">
         {/* Create Trip */}
         <button
           onClick={onCreateTrip}

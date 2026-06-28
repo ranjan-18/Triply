@@ -95,7 +95,14 @@ export const logout = catchAsync(
  * @route PATCH /api/auth/update-profile
  */
 export const updateProfileController = catchAsync(async (req, res) => {
-  const updatedUser = await updateProfile(req.user.id, req.body);
+  const payload = { ...req.body };
+
+  if (req.file) {
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    payload.avatar = `${baseUrl}/uploads/${req.file.filename}`;
+  }
+
+  const updatedUser = await updateProfile(req.user.id, payload);
 
   return res.status(200).json(
     apiResponse(true, "Profile updated successfully", updatedUser)

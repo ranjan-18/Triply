@@ -5,6 +5,7 @@ import { FaSignOutAlt, FaChevronUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/authStore";
 import axiosInstance from "../../../api/axiosInstance";
+import { disconnectSocket } from "../../../socket/socketClient";
 import toast from "react-hot-toast";
 
 /**
@@ -29,6 +30,7 @@ const SidebarProfile = () => {
     } catch {
       // Logout locally even if server call fails
     } finally {
+      disconnectSocket();
       clearAuth();
       toast.success("Logged out successfully");
       navigate("/login");

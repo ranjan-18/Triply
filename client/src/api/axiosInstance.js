@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import useAuthStore from "../store/authStore";
+import { disconnectSocket } from "../socket/socketClient";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -68,6 +69,7 @@ axiosInstance.interceptors.response.use(
       const refreshToken = useAuthStore.getState().refreshToken;
 
       if (!refreshToken) {
+        disconnectSocket();
         useAuthStore.getState().clearAuth();
         window.location.href = "/login";
         return Promise.reject(error);
@@ -94,6 +96,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        disconnectSocket();
         useAuthStore.getState().clearAuth();
         window.location.href = "/login";
         return Promise.reject(refreshError);

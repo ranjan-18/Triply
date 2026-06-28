@@ -4,6 +4,7 @@ import express from "express";
 
 import validate from "../../middleware/validate.js";
 import authMiddleware from "../../middleware/authMiddleware.js";
+import { upload } from "../../middleware/uploadMiddleware.js";
 
 import {
   registerSchema,
@@ -63,6 +64,7 @@ router.post(
 router.patch(
   "/profile",
   authMiddleware,
+  upload.single("avatar"),
   updateProfileController
 );
 

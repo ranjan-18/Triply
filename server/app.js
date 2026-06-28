@@ -21,7 +21,7 @@ const app = express();
 /**
  * Security Middleware
  */
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false }));
 
 /**
  * CORS Configuration
