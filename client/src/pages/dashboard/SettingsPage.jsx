@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
-import { FaUserEdit, FaSave, FaCamera } from "react-icons/fa";
+import { FaUserEdit, FaSave, FaCamera, FaTimes, FaCrop, FaPen } from "react-icons/fa";
 import useAuthStore from "../../store/authStore";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../utils/cropImage";
 
 const SettingsPage = () => {
   const { user } = useAuthStore();
@@ -13,6 +15,13 @@ const SettingsPage = () => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(user?.avatar || "");
 
+  // Crop state
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
   // Update state if user prop changes
   useEffect(() => {
     setName(user?.name || "");
@@ -22,9 +31,29 @@ const SettingsPage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setAvatarFile(file);
       const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      setImageToCrop(url);
+      setCropModalOpen(true);
+      
+      // Reset input so selecting the same file again works
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCropImage = async () => {
+    try {
+      const croppedImageBlob = await getCroppedImg(imageToCrop, croppedAreaPixels, 0);
+      const croppedFile = new File([croppedImageBlob], "avatar.jpg", { type: "image/jpeg" });
+      
+      setAvatarFile(croppedFile);
+      setPreviewUrl(URL.createObjectURL(croppedFile));
+      setCropModalOpen(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -76,6 +105,10 @@ const SettingsPage = () => {
                 <div className="absolute inset-0 bg-slate-900/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center border-4 border-transparent">
                   <FaCamera className="text-white text-2xl" />
                 </div>
+                {/* Pencil Badge */}
+                <div className="absolute bottom-1 right-1 w-9 h-9 bg-violet-600 text-white rounded-full flex items-center justify-center shadow-lg border-2 border-white group-hover:scale-110 transition-transform">
+                  <FaPen size={14} />
+                </div>
               </div>
               <input 
                 type="file" 
@@ -116,6 +149,71 @@ const SettingsPage = () => {
         </div>
 
       </div>
+
+      {/* Crop Modal */}
+      {cropModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
+          <div className="bg-white rounded-[32px] overflow-hidden w-full max-w-lg shadow-2xl animate-fade-in-up">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+                <FaCrop className="text-violet-600" /> Adjust Avatar
+              </h3>
+              <button 
+                onClick={() => setCropModalOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-slate-300 transition"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            
+            <div className="relative w-full h-80 bg-slate-900">
+              <Cropper
+                image={imageToCrop}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                showGrid={false}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+              />
+            </div>
+            
+            <div className="p-6 bg-white space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Zoom</label>
+                <input
+                  type="range"
+                  value={zoom}
+                  min={1}
+                  max={3}
+                  step={0.1}
+                  aria-labelledby="Zoom"
+                  onChange={(e) => setZoom(e.target.value)}
+                  className="w-full accent-violet-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              
+              <div className="flex items-center gap-3 pt-2">
+                <button 
+                  onClick={() => setCropModalOpen(false)}
+                  className="flex-1 py-3 px-4 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleCropImage}
+                  className="flex-1 py-3 px-4 rounded-xl bg-violet-600 text-white font-medium hover:bg-violet-700 shadow-md transition"
+                >
+                  Apply Crop
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </DashboardLayout>
   );
 };

@@ -1,6 +1,6 @@
 // src/components/dashboard/modals/JoinTripModal.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTicketAlt, FaTimes } from "react-icons/fa";
 import { useJoinTrip } from "../../../hooks/useJoinTrip";
 
@@ -8,11 +8,17 @@ import { useJoinTrip } from "../../../hooks/useJoinTrip";
  * Modal for joining a trip by invite code.
  * Closes automatically on successful join.
  *
- * @param {{ isOpen: boolean, onClose: Function }} props
+ * @param {{ isOpen: boolean, onClose: Function, initialCode: string }} props
  */
-const JoinTripModal = ({ isOpen, onClose }) => {
+const JoinTripModal = ({ isOpen, onClose, initialCode = "" }) => {
   const joinTripMutation = useJoinTrip();
   const [inviteCode, setInviteCode] = useState("");
+
+  useEffect(() => {
+    if (initialCode) {
+      setInviteCode(initialCode);
+    }
+  }, [initialCode]);
 
   if (!isOpen) return null;
 
@@ -20,7 +26,16 @@ const JoinTripModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (!inviteCode.trim()) return;
 
-    joinTripMutation.mutate(inviteCode.trim(), {
+    let code = inviteCode.trim();
+    // Parse link if it contains /join/
+    if (code.includes("/join/")) {
+      const parts = code.split("/join/");
+      if (parts.length === 2) {
+        code = parts[1].split(/[\/?#]/)[0];
+      }
+    }
+
+    joinTripMutation.mutate(code, {
       onSuccess: () => {
         setInviteCode("");
         onClose();
@@ -58,11 +73,10 @@ const JoinTripModal = ({ isOpen, onClose }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            placeholder="e.g. aB3xY7kL"
+            placeholder="e.g. aB3xY7kL or https://.../join/aB3xY7kL"
             className="w-full border border-slate-200 rounded-xl p-4 outline-none focus:ring-2 focus:ring-violet-500 transition text-center text-lg tracking-widest font-mono"
             value={inviteCode}
             onChange={(e) => setInviteCode(e.target.value)}
-            maxLength={8}
             required
           />
 

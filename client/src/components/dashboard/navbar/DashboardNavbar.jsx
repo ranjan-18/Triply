@@ -3,6 +3,7 @@ import {
   FaBell,
   FaPlus,
   FaBars,
+  FaLink,
 } from "react-icons/fa";
 
 import { useState, useRef, useEffect } from "react";
@@ -12,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const DashboardNavbar = ({
   onCreateTrip,
+  onJoinTrip,
   onMenuClick,
 }) => {
   const { user, clearAuth } = useAuthStore();
@@ -96,9 +98,17 @@ const DashboardNavbar = ({
           {/* Mobile Create Trip */}
           <button
             onClick={onCreateTrip}
-            className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-500 text-white px-4 py-2.5 rounded-xl font-medium shadow-md flex-1 justify-center"
+            className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-500 text-white px-3 py-2.5 rounded-xl font-medium shadow-md flex-1 justify-center text-sm"
           >
-            <FaPlus size={14} /> Create
+            <FaPlus size={12} /> Create
+          </button>
+
+          {/* Mobile Join Trip */}
+          <button
+            onClick={onJoinTrip}
+            className="flex items-center gap-2 bg-white border border-slate-200 text-slate-700 px-3 py-2.5 rounded-xl font-medium shadow-sm flex-1 justify-center text-sm"
+          >
+            <FaLink size={12} /> Join
           </button>
 
           {/* Mobile Notification */}
@@ -118,6 +128,16 @@ const DashboardNavbar = ({
 
       {/* Right (Desktop Only) */}
       <div className="hidden lg:flex items-center justify-between gap-4 w-full lg:w-auto mt-4 lg:mt-0">
+        
+        {/* Join Trip */}
+        <button
+          onClick={onJoinTrip}
+          className="flex items-center gap-2 bg-white text-slate-700 px-5 py-2.5 rounded-xl font-medium border border-slate-200 hover:bg-slate-50 transition shadow-sm"
+        >
+          <FaLink className="text-violet-500" />
+          Join Trip
+        </button>
+
         {/* Create Trip */}
         <button
           onClick={onCreateTrip}

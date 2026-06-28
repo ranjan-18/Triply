@@ -17,6 +17,7 @@ import ReportsPage from "../pages/dashboard/ReportsPage";
 import NotificationsPage from "../pages/dashboard/NotificationsPage";
 import SettingsPage from "../pages/dashboard/SettingsPage";
 import MyTripsPage from "../pages/dashboard/MyTripsPage";
+import JoinRedirect from "../pages/JoinRedirect";
 
 const AppRouter = () => {
   return (
@@ -25,6 +26,8 @@ const AppRouter = () => {
         <Route path="/" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>
+      
+      <Route path="/join/:code" element={<JoinRedirect />} />
 
       <Route
         path="/dashboard"
