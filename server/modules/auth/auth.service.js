@@ -47,7 +47,10 @@ export const registerUser = async (payload) => {
     userData: { name, passwordHash },
   });
 
-  await sendOtpEmail(email.toLowerCase(), otpCode);
+  // Send email asynchronously in the background so it doesn't block the API response
+  sendOtpEmail(email.toLowerCase(), otpCode).catch((err) => {
+    console.error("Failed to send OTP email in background:", err);
+  });
 
   return {
     message: "OTP sent successfully to your email.",
