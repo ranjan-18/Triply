@@ -108,8 +108,8 @@ const SettleUpCard = ({ tripId, baseCurrency = "INR" }) => {
                       {baseCurrency} {txn.amount.toFixed(2)}
                     </h4>
                     
-                    {/* Only show Record button if current user is involved */}
-                    {(user?.id === txn.from.userId || user?.id === txn.to.userId) && (
+                    {/* Only show Record button if current user is the payer */}
+                    {user?.id === txn.from.userId && (
                       <button 
                         onClick={() => {
                           setSelectedTransaction(txn);

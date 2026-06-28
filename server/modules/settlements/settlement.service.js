@@ -4,6 +4,7 @@ import Settlement from "./settlement.model.js";
 import Trip from "../trips/trip.model.js";
 import Expense from "../expenses/expense.model.js";
 import { logAndEmitActivity } from "../activities/activity.service.js";
+import { createNotification } from "../notifications/notification.service.js";
 
 /**
  * Propose a new settlement (partial or full).
@@ -44,6 +45,14 @@ export const proposeSettlement = async (tripId, payload, userId) => {
     action: "PROPOSED_SETTLEMENT",
     message: `recorded a payment of ${payload.currency || trip.baseCurrency} ${payload.amount} to ${populatedSettlement.paidTo.name}`,
     metadata: { settlementId: settlement._id }
+  });
+
+  await createNotification({
+    userId: payload.paidTo,
+    senderId: payload.paidBy,
+    type: "SETTLEMENT_PROPOSED",
+    message: `recorded a payment to you of ${payload.currency || trip.baseCurrency} ${payload.amount}`,
+    link: `/dashboard/settlements`,
   });
 
   return populatedSettlement;
@@ -101,6 +110,14 @@ export const approveSettlement = async (settlementId, userId) => {
     action: "APPROVED_SETTLEMENT",
     message: `approved a payment of ${settlement.currency} ${settlement.amount} from ${populatedSettlement.paidBy.name}`,
     metadata: { settlementId: settlement._id }
+  });
+
+  await createNotification({
+    userId: settlement.paidBy,
+    senderId: userId,
+    type: "SETTLEMENT_APPROVED",
+    message: `approved your payment of ${settlement.currency} ${settlement.amount}`,
+    link: `/dashboard/settlements`,
   });
 
   return populatedSettlement;

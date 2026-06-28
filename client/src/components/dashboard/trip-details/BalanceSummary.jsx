@@ -88,7 +88,7 @@ const BalanceSummary = ({ tripId }) => {
                     ? "Settled up"
                     : isPositive
                     ? "Gets back"
-                    : "Owes"}
+                    : "To Pay"}
                 </p>
               </div>
             </div>

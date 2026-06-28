@@ -20,7 +20,7 @@ const TripStats = ({
       color: "text-violet-600",
     },
     {
-      title: "You Owe",
+      title: "To Pay",
       value: `₹${owe}`,
       icon: <FaArrowUp />,
       bg: "bg-red-100",
