@@ -23,13 +23,7 @@ const schema = Joi.object({
   // Add the Pexels API Key to validation
   PEXELS_API_KEY: Joi.string().required(),
 
-  SMTP_HOST: Joi.string().optional(),
-
-  SMTP_PORT: Joi.number().optional(),
-
-  SMTP_USER: Joi.string().optional(),
-
-  SMTP_PASS: Joi.string().optional()
+  RESEND_API_KEY: Joi.string().required()
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
