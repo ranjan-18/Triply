@@ -21,7 +21,10 @@ const app = express();
 /**
  * Security Middleware
  */
-app.use(helmet({ crossOriginResourcePolicy: false }));
+app.use(helmet({ 
+  crossOriginResourcePolicy: false,
+  hsts: false // Disable HSTS to prevent forcing HTTPS on localhost
+}));
 
 /**
  * CORS Configuration
