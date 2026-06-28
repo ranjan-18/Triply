@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "../components/dashboard/sidebar/Sidebar";
 import DashboardNavbar from "../components/dashboard/navbar/DashboardNavbar";
 import { useGlobalSocket } from "../hooks/useGlobalSocket";
+import CreateTripModal from "../components/dashboard/modals/CreateTripModal";
 
 const DashboardLayout = ({
   children,
@@ -10,6 +11,7 @@ const DashboardLayout = ({
 }) => {
   useGlobalSocket();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openCreateTrip, setOpenCreateTrip] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#f7f4ff] flex relative overflow-x-hidden">
@@ -35,15 +37,17 @@ const DashboardLayout = ({
 
       <div className="flex-1 flex flex-col w-full lg:w-[calc(100%-280px)] min-w-0">
         {navbar ? (
-          <navbar.type {...navbar.props} onMenuClick={() => setIsSidebarOpen(true)} />
+          <navbar.type {...navbar.props} onMenuClick={() => setIsSidebarOpen(true)} onCreateTrip={() => setOpenCreateTrip(true)} />
         ) : (
-          <DashboardNavbar onMenuClick={() => setIsSidebarOpen(true)} />
+          <DashboardNavbar onMenuClick={() => setIsSidebarOpen(true)} onCreateTrip={() => setOpenCreateTrip(true)} />
         )}
 
         <main className="p-4 lg:p-6 overflow-x-hidden">
           {children}
         </main>
       </div>
+
+      <CreateTripModal isOpen={openCreateTrip} onClose={() => setOpenCreateTrip(false)} />
     </div>
   );
 };

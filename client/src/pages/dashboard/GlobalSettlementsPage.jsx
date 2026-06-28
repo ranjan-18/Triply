@@ -103,7 +103,21 @@ const GlobalSettlementsPage = () => {
                     <p className="text-slate-500 mt-2">You have no pending debts across any of your trips.</p>
                   </div>
                 ) : (
-                  optimized.map((item, idx) => (
+                  optimized.map((item, idx) => {
+                    const currentUserId = user?.id?.toString() || user?._id?.toString();
+                    
+                    const pendingSettlement = history.find(s => {
+                      const sTripId = s.tripId?._id?.toString() || s.tripId?.toString();
+                      const sPaidBy = s.paidBy?._id?.toString() || s.paidBy?.toString();
+                      const sPaidTo = s.paidTo?._id?.toString() || s.paidTo?.toString();
+                      
+                      return s.status === "Pending" && 
+                             sTripId === item.tripId?.toString() && 
+                             sPaidBy === item.transaction.from.userId?.toString() && 
+                             sPaidTo === item.transaction.to.userId?.toString();
+                    });
+
+                    return (
                     <div key={idx} className="p-6 flex items-center justify-between hover:bg-slate-50 transition">
                       <div className="flex items-center gap-5">
                         <div className="flex items-center -space-x-4">
@@ -133,20 +147,37 @@ const GlobalSettlementsPage = () => {
                         <h3 className="text-2xl font-bold text-slate-800">
                           {item.baseCurrency} {item.transaction.amount.toFixed(2)}
                         </h3>
-                        {user?.id === item.transaction.from.userId && (
-                          <button 
-                            onClick={() => {
-                              setSelectedTransaction(item);
-                              setPaymentAmount(item.transaction.amount);
-                            }}
-                            className="bg-violet-600 text-white font-semibold rounded-xl px-5 py-2 hover:bg-violet-700 transition shadow-md"
-                          >
-                            Record Payment
-                          </button>
+                        
+                        {pendingSettlement ? (
+                          currentUserId === item.transaction.to.userId?.toString() ? (
+                            <button 
+                              onClick={() => handleApprove(pendingSettlement)}
+                              disabled={approveMutation.isPending}
+                              className="bg-emerald-500 text-white font-semibold rounded-xl px-5 py-2 hover:bg-emerald-600 transition shadow-md disabled:opacity-50"
+                            >
+                              Approve Payment
+                            </button>
+                          ) : (
+                            <span className="text-sm font-semibold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
+                              Awaiting Approval
+                            </span>
+                          )
+                        ) : (
+                          currentUserId === item.transaction.from.userId?.toString() && (
+                            <button 
+                              onClick={() => {
+                                setSelectedTransaction(item);
+                                setPaymentAmount(item.transaction.amount);
+                              }}
+                              className="bg-violet-600 text-white font-semibold rounded-xl px-5 py-2 hover:bg-violet-700 transition shadow-md"
+                            >
+                              Record Payment
+                            </button>
+                          )
                         )}
                       </div>
                     </div>
-                  ))
+                  )})
                 )
               )}
 

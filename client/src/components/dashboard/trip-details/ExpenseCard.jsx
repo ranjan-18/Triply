@@ -17,17 +17,12 @@ const categoryIcons = {
 
 const categoryColors = {
   Food: "bg-violet-100 text-violet-600",
-  Transport:
-    "bg-emerald-100 text-emerald-600",
+  Transport: "bg-emerald-100 text-emerald-600",
   Stay: "bg-blue-100 text-blue-600",
   Other: "bg-orange-100 text-orange-600",
 };
 
-const ExpenseCard = ({
-  expense,
-  onEdit,
-  onDelete,
-}) => {
+const ExpenseCard = ({ expense, onEdit, onDelete }) => {
   const { user } = useAuthStore();
   
   // The user.id from JWT might be a string, and expense.paidBy._id is an object ID
@@ -35,193 +30,86 @@ const ExpenseCard = ({
                     expense.paidBy?.toString() === user?.id?.toString();
 
   return (
-    <div
-      className="
-      bg-white
-      rounded-3xl
-      p-6
-      shadow-sm
-      hover:shadow-lg
-      transition-all
-      duration-300
-      border
-      border-slate-100
-    "
-    >
-      <div className="flex justify-between items-start">
-        {/* LEFT */}
-        <div className="flex gap-5">
+    <div className="bg-white rounded-[24px] sm:rounded-3xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-slate-100 flex flex-col gap-4">
+      {/* Top Section: Icon, Title, Amount, Date */}
+      <div className="flex justify-between items-start gap-3 sm:gap-4">
+        
+        <div className="flex gap-3 sm:gap-4 items-center overflow-hidden">
           {/* Category Icon */}
-          <div
-            className={`
-            w-16
-            h-16
-            rounded-2xl
-            flex
-            items-center
-            justify-center
-            text-2xl
-            ${
-              categoryColors[
-                expense.category
-              ] ||
-              "bg-slate-100 text-slate-600"
-            }
-          `}
-          >
-            {categoryIcons[
-              expense.category
-            ] || <FaReceipt />}
+          <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl sm:text-2xl shrink-0 ${categoryColors[expense.category] || "bg-slate-100 text-slate-600"}`}>
+            {categoryIcons[expense.category] || <FaReceipt />}
           </div>
 
-          {/* Details */}
-          <div>
-            <h3
-              className="
-              text-xl
-              font-bold
-              text-slate-900
-            "
-            >
+          {/* Title & Category */}
+          <div className="flex flex-col overflow-hidden">
+            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 truncate leading-tight">
               {expense.title}
             </h3>
-
-            <p
-              className="
-              text-slate-500
-              mt-1
-            "
-            >
+            <p className="text-slate-500 mt-1 text-xs sm:text-sm font-semibold uppercase tracking-wider">
               {expense.category}
             </p>
-
-            <div className="flex items-center gap-3 mt-4">
-              <img
-                src={
-                  expense.paidBy?.avatar ||
-                  `https://ui-avatars.com/api/?name=${expense.paidBy?.name}`
-                }
-                alt=""
-                className="
-                w-10
-                h-10
-                rounded-full
-              "
-              />
-
-              <div>
-                <p className="text-sm text-slate-500">
-                  Paid by
-                </p>
-
-                <p className="font-medium">
-                  {expense.paidBy?.name}
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="text-right">
-          <h2
-            className="
-            text-3xl
-            font-bold
-            text-slate-900
-          "
-          >
-            ₹{expense.amount}
+        {/* Amount & Date */}
+        <div className="text-right shrink-0">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            {expense.currency || "₹"}{expense.amount}
           </h2>
-
-          <p
-            className="
-            text-slate-400
-            mt-2
-          "
-          >
-            {new Date(
-              expense.date
-            ).toLocaleDateString()}
+          <p className="text-slate-400 mt-1 sm:mt-2 text-[10px] sm:text-sm font-bold uppercase tracking-wider">
+            {new Date(expense.date).toLocaleDateString()}
           </p>
-
-          {/* Actions */}
-          {isCreator && (
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() =>
-                  onEdit(expense)
-                }
-                className="
-                w-10
-                h-10
-                rounded-xl
-                bg-violet-100
-                text-violet-600
-                flex
-                items-center
-                justify-center
-                hover:bg-violet-600
-                hover:text-white
-                transition
-              "
-              >
-                <FaEdit />
-              </button>
-
-              <button
-                onClick={() =>
-                  onDelete(
-                    expense._id
-                  )
-                }
-                className="
-                w-10
-                h-10
-                rounded-xl
-                bg-red-100
-                text-red-500
-                flex
-                items-center
-                justify-center
-                hover:bg-red-500
-                hover:text-white
-                transition
-              "
-              >
-                <FaTrash />
-              </button>
-            </div>
-          )}
         </div>
+      </div>
+
+      {/* Middle Section: Payer & Actions */}
+      <div className="flex items-center justify-between mt-1 sm:mt-2">
+        
+        {/* Paid By Badge */}
+        <div className="flex items-center gap-2 sm:gap-3 bg-slate-50/80 py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-xl border border-slate-100">
+          <img
+            src={expense.paidBy?.avatar || `https://ui-avatars.com/api/?name=${expense.paidBy?.name}`}
+            alt=""
+            className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border border-white shadow-sm"
+          />
+          <div className="flex flex-col">
+            <span className="text-[9px] sm:text-[10px] text-slate-400 font-extrabold uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Paid by</span>
+            <span className="text-xs sm:text-sm font-bold text-slate-700 leading-none truncate max-w-[100px] sm:max-w-none">{expense.paidBy?.name}</span>
+          </div>
+        </div>
+
+        {/* Actions */}
+        {isCreator && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onEdit(expense)}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center hover:bg-violet-600 hover:text-white transition-colors border border-violet-100"
+            >
+              <FaEdit className="text-sm sm:text-base" />
+            </button>
+            <button
+              onClick={() => onDelete(expense._id)}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors border border-red-100"
+            >
+              <FaTrash className="text-sm sm:text-base" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Bottom Summary */}
-      <div
-        className="
-        mt-6
-        pt-6
-        border-t
-        flex
-        justify-between
-        text-sm
-        text-slate-500
-      "
-      >
-        <div>
-          Split Type:
-          <span className="font-semibold ml-2 text-slate-700">
-            {expense.splitType}
-          </span>
+      <div className="pt-3 sm:pt-4 mt-1 sm:mt-2 border-t border-slate-100 flex justify-between items-center">
+        <div className="bg-slate-50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-100/50">
+          <span className="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Split</span>
+          <span className="text-xs sm:text-sm font-black text-slate-700 capitalize">{expense.splitType}</span>
         </div>
-
-        <div>
-          Participants:
-          <span className="font-semibold ml-2 text-slate-700">
-            {expense.splits?.length || 0}
-          </span>
+        
+        <div className="bg-slate-50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-100/50">
+          <span className="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Members</span>
+          <span className="text-xs sm:text-sm font-black text-slate-700">{expense.splits?.length || 0}</span>
         </div>
       </div>
+      
     </div>
   );
 };

@@ -20,6 +20,10 @@ export const createTripSchema = Joi.object({
   budget: Joi.number()
     .min(0)
     .optional(),
+    
+  friends: Joi.array()
+    .items(Joi.string())
+    .optional(),
 });
 
 export const joinTripSchema = Joi.object({

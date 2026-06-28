@@ -174,17 +174,24 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
   const isPending = createExpenseMutation.isPending || editExpenseMutation.isPending;
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6 overflow-y-auto">
-      <div className="bg-white rounded-[36px] w-full max-w-7xl p-10 max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-start mb-8">
+    <div 
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6 overflow-hidden"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-t-[32px] sm:rounded-[36px] rounded-b-none sm:rounded-b-[36px] w-full max-w-7xl p-5 sm:p-10 max-h-[92vh] sm:max-h-[95vh] overflow-y-auto shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="w-16 h-1.5 bg-slate-200 rounded-full mx-auto mb-6 sm:hidden" />
+        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-4xl font-bold text-slate-900">{expenseToEdit ? "Edit expense" : "Add expense"}</h2>
-            <p className="text-slate-500 mt-2">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{expenseToEdit ? "Edit expense" : "Add expense"}</h2>
+            <p className="text-slate-500 mt-2 text-sm sm:text-base">
               {expenseToEdit ? "Update expense details and splits" : "Add a new expense and split it with your group"}
             </p>
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex flex-wrap md:flex-nowrap gap-3 w-full md:w-auto">
             <input 
               type="file" 
               accept="image/*" 
@@ -196,55 +203,55 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={scanReceiptMutation.isPending}
-              className="border-2 border-violet-200 text-violet-700 bg-violet-50 rounded-2xl px-6 py-4 hover:bg-violet-100 transition flex items-center gap-2 font-semibold"
+              className="flex-1 md:flex-none border border-violet-200 text-violet-700 bg-violet-50 rounded-2xl px-5 py-3 sm:px-6 sm:py-4 hover:bg-violet-100 transition flex items-center justify-center gap-2 font-semibold shadow-sm"
             >
               {scanReceiptMutation.isPending ? <FaSpinner className="animate-spin" /> : <FaCamera />}
               {scanReceiptMutation.isPending ? "Scanning..." : "Scan Receipt"}
             </button>
-            <button onClick={onClose} className="border rounded-2xl p-5 hover:bg-slate-50 transition">
+            <button onClick={onClose} className="border border-slate-200 rounded-2xl p-3 sm:p-4 hover:bg-slate-50 transition shadow-sm bg-white text-slate-500 hover:text-slate-800">
               <FaTimes />
             </button>
           </div>
         </div>
 
         {ocrResult && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-8 flex justify-between items-center text-emerald-800">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8 flex justify-between items-center text-emerald-800">
             <div>
               <h4 className="font-bold flex items-center gap-2">✨ AI Extracted Data</h4>
-              <p className="text-sm mt-1">We found an amount of {formData.currency} {ocrResult.amount} and categorized it as {ocrResult.category}. Please verify and enter a title.</p>
+              <p className="text-xs sm:text-sm mt-1">We found an amount of {formData.currency} {ocrResult.amount} and categorized it as {ocrResult.category}. Please verify and enter a title.</p>
             </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid lg:grid-cols-2 gap-8">
+        <form onSubmit={handleSubmit} className="grid lg:grid-cols-2 gap-6 sm:gap-8">
           {/* LEFT PANEL */}
           <div>
-            <h3 className="font-semibold mb-3">What was this for?</h3>
+            <h3 className="font-semibold text-slate-700 mb-2">What was this for?</h3>
             <input
               required
-              className="w-full border rounded-2xl p-5 outline-none focus:border-violet-500"
-              placeholder="Dinner at restaurant"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 outline-none focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10 transition-all text-slate-800 font-medium"
+              placeholder="e.g. Dinner at restaurant"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
 
-            <h3 className="font-semibold mt-8 mb-3">Amount</h3>
+            <h3 className="font-semibold text-slate-700 mt-6 sm:mt-8 mb-2">Amount</h3>
             <input
               required
               type="number"
               step="0.01"
               min="0.01"
-              className="w-full border rounded-2xl p-5 outline-none focus:border-violet-500"
-              placeholder="4200"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 outline-none focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10 transition-all text-slate-800 font-bold text-xl"
+              placeholder="0.00"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
             />
 
-            <div className="grid grid-cols-2 gap-4 mt-8">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8">
               <div>
-                <h3 className="font-semibold mb-3">Currency</h3>
+                <h3 className="font-semibold text-slate-700 mb-2">Currency</h3>
                 <select
-                  className="w-full border rounded-2xl p-5 outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 outline-none focus:border-violet-500 focus:bg-white transition-all text-slate-800 font-medium appearance-none cursor-pointer"
                   value={formData.currency}
                   onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
                 >
@@ -255,11 +262,11 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
               </div>
 
               <div>
-                <h3 className="font-semibold mb-3">Date</h3>
+                <h3 className="font-semibold text-slate-700 mb-2">Date</h3>
                 <input
                   required
                   type="date"
-                  className="w-full border rounded-2xl p-5 outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 outline-none focus:border-violet-500 focus:bg-white transition-all text-slate-800 font-medium cursor-pointer"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                 />
@@ -267,36 +274,36 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
             </div>
 
             {/* Categories */}
-            <h3 className="font-semibold mt-8 mb-4">Category</h3>
-            <div className="grid grid-cols-4 gap-4">
+            <h3 className="font-semibold text-slate-700 mt-6 sm:mt-8 mb-3">Category</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {categories.map((category) => (
                 <button
                   key={category.label}
                   type="button"
                   onClick={() => setFormData({ ...formData, category: category.label })}
-                  className={`h-32 border rounded-3xl flex flex-col justify-center items-center gap-3 transition ${
+                  className={`h-24 sm:h-32 border-2 rounded-2xl sm:rounded-[24px] flex flex-col justify-center items-center gap-2 sm:gap-3 transition-all duration-200 ${
                     formData.category === category.label
-                      ? "border-violet-500 bg-violet-50 text-violet-700"
-                      : "hover:bg-slate-50 text-slate-600"
+                      ? "border-violet-500 bg-violet-50/50 text-violet-700 shadow-[0_0_20px_rgba(139,92,246,0.15)] scale-[1.02]"
+                      : "border-slate-100 hover:border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-700"
                   }`}
                 >
-                  <div className="text-2xl">{category.icon}</div>
-                  <span className="font-medium">{category.label}</span>
+                  <div className="text-xl sm:text-2xl">{category.icon}</div>
+                  <span className="font-medium text-sm sm:text-base">{category.label}</span>
                 </button>
               ))}
             </div>
 
             {/* Split Method */}
-            <h3 className="font-semibold mt-8 mb-4">Split Method</h3>
-            <div className="grid grid-cols-4 border rounded-2xl overflow-hidden font-medium">
+            <h3 className="font-semibold text-slate-700 mt-6 sm:mt-8 mb-3">Split Method</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 bg-slate-100/80 border border-slate-200/60 rounded-2xl p-1 gap-1">
               {splitMethods.map((method) => (
                 <button
                   key={method.value}
                   type="button"
-                  className={`py-4 transition ${
+                  className={`py-3 sm:py-4 rounded-xl text-sm sm:text-base font-semibold transition-all duration-200 ${
                     formData.splitType === method.value
-                      ? "bg-violet-600 text-white"
-                      : "bg-white text-slate-600 hover:bg-slate-50 border-r last:border-none"
+                      ? "bg-white text-violet-700 shadow-sm ring-1 ring-slate-200/50"
+                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/50"
                   }`}
                   onClick={() => setFormData({ ...formData, splitType: method.value })}
                 >
@@ -307,19 +314,19 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
           </div>
 
           {/* RIGHT PANEL */}
-          <div className="border border-slate-200 rounded-[32px] p-7 shadow-sm flex flex-col">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center text-2xl">
+          <div className="border-2 border-slate-100 bg-slate-50/30 rounded-[24px] sm:rounded-[32px] p-4 sm:p-7 flex flex-col shadow-[inset_0_2px_20px_rgba(0,0,0,0.01)] h-[500px] lg:h-auto overflow-hidden">
+            <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-shrink-0">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-2xl">
                 👥
               </div>
               <div>
-                <h3 className="font-bold text-2xl text-slate-800">
+                <h3 className="font-bold text-xl sm:text-2xl text-slate-800">
                   {formData.splitType === "equal" && "Split equally"}
                   {formData.splitType === "unequal" && "Split exact amounts"}
                   {formData.splitType === "percentage" && "Split by percentage"}
                   {formData.splitType === "shares" && "Split by shares"}
                 </h3>
-                <p className="text-slate-500">
+                <p className="text-slate-500 text-sm sm:text-base">
                   {formData.splitType === "equal" && "Select who to include"}
                   {formData.splitType === "unequal" && "Enter exact amount for each person"}
                   {formData.splitType === "percentage" && "Enter percentage for each person"}
@@ -329,15 +336,15 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
             </div>
 
             {formData.splitType === "equal" && (
-              <div className="bg-emerald-50 rounded-2xl p-5 flex justify-between items-center mb-8">
-                <p className="text-emerald-700 font-medium">Each included person pays</p>
-                <h2 className="text-3xl font-bold text-emerald-600">
+              <div className="bg-emerald-50 border border-emerald-100/50 rounded-2xl p-4 sm:p-5 flex justify-between items-center mb-6 flex-shrink-0">
+                <p className="text-emerald-700 font-semibold text-sm sm:text-base">Each pays</p>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-emerald-600">
                   {formData.currency} {perPersonAmount.toFixed(2)}
                 </h2>
               </div>
             )}
 
-            <div className="space-y-4 flex-1 overflow-y-auto pr-2">
+            <div className="space-y-3 sm:space-y-4 flex-1 overflow-y-auto pr-2 pb-2">
               {(trip?.members || []).map((member) => {
                 const userId = member.userId._id;
                 const splitData = splitValues[userId] || {};
@@ -346,28 +353,28 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
                 return (
                   <div
                     key={userId}
-                    className={`flex items-center justify-between rounded-2xl p-4 border transition-all ${
+                    className={`flex items-center justify-between rounded-2xl p-3 sm:p-4 border-2 transition-all duration-200 ${
                       formData.splitType === "equal"
-                        ? isChecked ? "border-violet-300 bg-violet-50 cursor-pointer" : "border-slate-200 bg-white opacity-60 hover:opacity-100 cursor-pointer"
-                        : "border-slate-200 bg-white"
+                        ? isChecked ? "border-violet-200 bg-violet-50/50 cursor-pointer" : "border-slate-100 bg-white opacity-60 hover:opacity-100 cursor-pointer"
+                        : "border-slate-100 bg-white"
                     }`}
                     onClick={() => toggleInclude(userId)}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       {formData.splitType === "equal" && (
-                        <div className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${isChecked ? "bg-violet-600 border-violet-600 text-white" : "border-slate-300"}`}>
-                          {isChecked && "✓"}
+                        <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-lg border-2 flex items-center justify-center transition-colors ${isChecked ? "bg-violet-600 border-violet-600 text-white" : "border-slate-300 bg-white"}`}>
+                          {isChecked && <span className="text-xs sm:text-sm">✓</span>}
                         </div>
                       )}
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-200 flex items-center justify-center text-violet-700 font-bold">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center text-violet-700 font-bold border border-violet-200/50">
                         {member.userId.name?.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-slate-800">
-                          {member.userId.name} {user?.id === userId && "(You)"}
+                        <h4 className="font-bold text-sm sm:text-base text-slate-800">
+                          {member.userId.name} {user?.id === userId && <span className="text-violet-600 font-semibold">(You)</span>}
                         </h4>
                         {formData.splitType === "equal" && (
-                          <p className="text-slate-500 text-xs">{isChecked ? "Included" : "Excluded"}</p>
+                          <p className="text-slate-400 font-medium text-[10px] sm:text-xs uppercase tracking-wider">{isChecked ? "Included" : "Excluded"}</p>
                         )}
                       </div>
                     </div>
@@ -375,24 +382,24 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
                     <div className="text-right" onClick={(e) => e.stopPropagation()}>
                       {formData.splitType === "equal" ? (
                         isChecked ? (
-                          <h3 className="font-bold text-lg text-slate-800">{formData.currency} {perPersonAmount.toFixed(2)}</h3>
+                          <h3 className="font-bold text-base sm:text-lg text-slate-800">{formData.currency} {perPersonAmount.toFixed(2)}</h3>
                         ) : (
-                          <p className="text-slate-400 font-medium">Excluded</p>
+                          <p className="text-slate-400 font-medium text-sm">Excluded</p>
                         )
                       ) : (
-                        <div className="flex items-center justify-end gap-2">
-                          {formData.splitType === "unequal" && <span className="text-slate-400">{formData.currency}</span>}
+                        <div className="flex items-center justify-end gap-1 sm:gap-2">
+                          {formData.splitType === "unequal" && <span className="text-slate-400 font-medium">{formData.currency}</span>}
                           <input
                             type="number"
                             min="0"
                             step="any"
                             placeholder="0"
-                            className="w-24 border rounded-xl p-2 text-right outline-none focus:border-violet-500"
+                            className="w-20 sm:w-24 bg-slate-50 border border-slate-200 rounded-xl p-2 sm:p-3 text-right outline-none focus:border-violet-500 focus:bg-white transition-all font-semibold"
                             value={splitData.value}
                             onChange={(e) => handleSplitValueChange(userId, e.target.value)}
                           />
-                          {formData.splitType === "percentage" && <span className="text-slate-400">%</span>}
-                          {formData.splitType === "shares" && <span className="text-slate-400 text-sm">shares</span>}
+                          {formData.splitType === "percentage" && <span className="text-slate-400 font-medium">%</span>}
+                          {formData.splitType === "shares" && <span className="text-slate-400 font-medium text-sm">shares</span>}
                         </div>
                       )}
                     </div>
@@ -402,27 +409,27 @@ const AddExpenseModal = ({ isOpen, onClose, trip, expenseToEdit }) => {
             </div>
 
             {formData.splitType === "percentage" && (
-              <div className="mt-4 text-sm text-center">Total: {Object.values(splitValues).reduce((sum, s) => sum + Number(s.value || 0), 0)}%</div>
+              <div className="mt-4 text-xs sm:text-sm font-semibold text-slate-500 text-center flex-shrink-0 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">Total: <span className="text-violet-600 text-base">{Object.values(splitValues).reduce((sum, s) => sum + Number(s.value || 0), 0)}%</span></div>
             )}
             {formData.splitType === "unequal" && (
-              <div className="mt-4 text-sm text-center">Total Entered: {formData.currency} {Object.values(splitValues).reduce((sum, s) => sum + Number(s.value || 0), 0)}</div>
+              <div className="mt-4 text-xs sm:text-sm font-semibold text-slate-500 text-center flex-shrink-0 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">Total Entered: <span className="text-violet-600 text-base">{formData.currency} {Object.values(splitValues).reduce((sum, s) => sum + Number(s.value || 0), 0)}</span></div>
             )}
           </div>
 
-          <div className="lg:col-span-2 flex items-center justify-between mt-4 border-t pt-8">
-            <div>
-              <p className="text-slate-500 font-medium">Total Expense Amount</p>
-              <h3 className="text-4xl font-bold text-slate-900">{formData.currency} {amountNumber.toLocaleString()}</h3>
+          <div className="lg:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-4 sm:mt-8 border-t border-slate-200 pt-6 sm:pt-8">
+            <div className="w-full sm:w-auto text-center sm:text-left">
+              <p className="text-slate-500 font-bold text-xs sm:text-sm uppercase tracking-wider mb-1">Total Expense</p>
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{formData.currency} {amountNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
             </div>
 
-            <div className="flex gap-4">
-              <button type="button" onClick={onClose} className="border border-slate-200 text-slate-600 font-semibold rounded-2xl px-10 py-4 hover:bg-slate-50 transition">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+              <button type="button" onClick={onClose} className="w-full sm:w-auto bg-white border-2 border-slate-200 text-slate-600 font-bold rounded-2xl px-8 py-4 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 transition-all focus:outline-none focus:ring-4 focus:ring-slate-100">
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isPending || !formData.title || !formData.amount}
-                className="bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-2xl px-10 py-4 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
+                className="w-full sm:w-auto bg-violet-600 text-white font-bold rounded-2xl px-8 py-4 hover:bg-violet-700 transition-all disabled:opacity-50 disabled:hover:bg-violet-600 shadow-[0_8px_20px_rgba(139,92,246,0.3)] hover:shadow-[0_12px_25px_rgba(139,92,246,0.4)] disabled:shadow-none translate-y-0 hover:-translate-y-0.5 disabled:translate-y-0 focus:outline-none focus:ring-4 focus:ring-violet-500/30"
               >
                 {isPending ? "Saving..." : (expenseToEdit ? "Save Changes" : "Add Expense")}
               </button>

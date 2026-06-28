@@ -23,6 +23,22 @@ export const createTrip = async (payload, userId) => {
     logger.error(`Image fetch failed during trip creation: ${error.message}`);
   }
 
+  const members = [
+    {
+      userId,
+      role: "admin",
+    },
+  ];
+
+  if (payload.friends && Array.isArray(payload.friends)) {
+    payload.friends.forEach((friendId) => {
+      members.push({
+        userId: friendId,
+        role: "member",
+      });
+    });
+  }
+
   const trip = await Trip.create({
     title: payload.title,
     destination: payload.destination,
@@ -30,12 +46,7 @@ export const createTrip = async (payload, userId) => {
     baseCurrency: payload.baseCurrency || "INR",
     budget: payload.budget || 0,
     inviteCode,
-    members: [
-      {
-        userId,
-        role: "admin",
-      },
-    ],
+    members,
   });
 
   return await Trip.findById(trip._id)
