@@ -17,38 +17,32 @@ export const useGlobalSocket = () => {
 
     // Listen for incoming global notifications (like friend requests, accepted requests, or settlements)
     socket.on("NEW_NOTIFICATION", (notification) => {
-      // Invalidate the unread notifications count query if you have one, or the notifications list
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-
       // Show toast
       if (notification.type === "FRIEND_REQUEST") {
         toast.success(`New Friend Request: ${notification.message}`);
-        queryClient.invalidateQueries({ queryKey: ["friends"] });
       } else if (notification.type === "FRIEND_ACCEPTED") {
         toast.success(notification.message);
-        queryClient.invalidateQueries({ queryKey: ["friends"] });
       } else {
         toast.success(notification.message);
       }
+      
+      // Auto-refresh the ENTIRE website on any notification
+      queryClient.invalidateQueries();
     });
 
     // Listen for friend request specific signals to instantly update UI lists
     socket.on("FRIEND_REQUEST_RECEIVED", () => {
-      queryClient.invalidateQueries({ queryKey: ["friends"] });
+      queryClient.invalidateQueries();
     });
 
     socket.on("FRIEND_REQUEST_ACCEPTED", () => {
-      queryClient.invalidateQueries({ queryKey: ["friends"] });
+      queryClient.invalidateQueries();
     });
 
     socket.on("GLOBAL_DATA_UPDATED", () => {
-      // Invalidate global queries when activity occurs in any trip the user is part of
-      queryClient.invalidateQueries({ queryKey: ["trips"] });
-      queryClient.invalidateQueries({ queryKey: ["globalExpenses"] });
-      queryClient.invalidateQueries({ queryKey: ["globalSettlements"] });
-      queryClient.invalidateQueries({ queryKey: ["globalOptimizedSettlements"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
+      queryClient.invalidateQueries();
     });
+
 
     return () => {
       // Don't disconnect here because other components (like LiveFeed) rely on the same socket instance
