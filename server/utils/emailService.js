@@ -1,13 +1,22 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import env from "../config/env.js";
 
-const resend = new Resend(env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT || 587,
+  secure: env.SMTP_PORT == 465,
+  auth: {
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASS,
+  },
+});
 
 export const sendOtpEmail = async (toEmail, otpCode) => {
-  const { error } = await resend.emails.send({
-    from: "Triply <onboarding@resend.dev>",
-    to: [toEmail],
+  const info = await transporter.sendMail({
+    from: `"Triply" <${env.SMTP_USER}>`,
+    to: toEmail,
     subject: "Your Triply Verification Code",
+    text: `Welcome to Triply! Your verification code is: ${otpCode}. It will expire in 10 minutes.`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
         <h2 style="color: #7c3aed;">Welcome to Triply!</h2>
@@ -20,8 +29,5 @@ export const sendOtpEmail = async (toEmail, otpCode) => {
     `,
   });
 
-  if (error) {
-    console.error("Resend email error:", error);
-    throw new Error(error.message);
-  }
+  console.log("OTP email sent successfully. Message ID:", info.messageId);
 };

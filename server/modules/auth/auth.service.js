@@ -4,9 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "./auth.model.js";
-import Otp from "./otp.model.js";
 import env from "../../config/env.js";
-import { sendOtpEmail } from "../../utils/emailService.js";
 
 import {
   generateAccessToken,
@@ -15,77 +13,29 @@ import {
 
 /**
  * Register new user
- * @param {Object} payload
- * @returns {Promise<Object>}
  */
 export const registerUser = async (payload) => {
   const { name, email, password } = payload;
 
-  const existingUser = await User.findOne({
-    email: email.toLowerCase(),
-  });
-
+  // Check if user already exists
+  const existingUser = await User.findOne({ email: email.toLowerCase() });
   if (existingUser) {
-    const error = new Error(
-      "User already exists with this email"
-    );
+    const error = new Error("User already exists with this email");
     error.statusCode = 409;
     throw error;
   }
 
+  // Hash password
   const passwordHash = await bcrypt.hash(password, 10);
 
-  // Generate 6-digit OTP
-  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-  // Remove any existing OTP for this email
-  await Otp.deleteMany({ email: email.toLowerCase() });
-
-  await Otp.create({
-    email: email.toLowerCase(),
-    otp: otpCode,
-    userData: { name, passwordHash },
-  });
-
-  // Send email asynchronously in the background so it doesn't block the API response
-  sendOtpEmail(email.toLowerCase(), otpCode).catch((err) => {
-    console.error("Failed to send OTP email in background:", err);
-  });
-
-  return {
-    message: "OTP sent successfully to your email.",
-  };
-};
-
-/**
- * Verify OTP and create user
- * @param {Object} payload
- * @returns {Promise<Object>}
- */
-export const verifyOtpUser = async (payload) => {
-  const { email, otp } = payload;
-
-  const otpRecord = await Otp.findOne({
-    email: email.toLowerCase(),
-    otp,
-  });
-
-  if (!otpRecord) {
-    const error = new Error("Invalid or expired OTP");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const { name, passwordHash } = otpRecord.userData;
-
+  // Create user directly
   const user = await User.create({
     name,
     email: email.toLowerCase(),
     passwordHash,
   });
 
-  await Otp.deleteMany({ email: email.toLowerCase() });
-
+  // Generate JWT tokens
   const accessToken = generateAccessToken(user._id.toString());
   const refreshToken = generateRefreshToken(user._id.toString());
 
@@ -106,48 +56,30 @@ export const verifyOtpUser = async (payload) => {
 
 /**
  * Login user
- * @param {Object} payload
- * @returns {Promise<Object>}
  */
 export const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  const user = await User.findOne({
-    email: email.toLowerCase(),
-  });
+  const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
-    const error = new Error(
-      "Invalid email or password"
-    );
+    const error = new Error("Invalid email or password");
     error.statusCode = 401;
     throw error;
   }
 
-  const isPasswordValid =
-    await bcrypt.compare(
-      password,
-      user.passwordHash
-    );
+  const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
   if (!isPasswordValid) {
-    const error = new Error(
-      "Invalid email or password"
-    );
+    const error = new Error("Invalid email or password");
     error.statusCode = 401;
     throw error;
   }
 
-  const accessToken = generateAccessToken(
-    user._id.toString()
-  );
-
-  const refreshToken = generateRefreshToken(
-    user._id.toString()
-  );
+  const accessToken = generateAccessToken(user._id.toString());
+  const refreshToken = generateRefreshToken(user._id.toString());
 
   user.refreshToken = refreshToken;
-
   await user.save();
 
   return {
@@ -164,53 +96,27 @@ export const loginUser = async (payload) => {
 
 /**
  * Refresh access & refresh tokens
- * @param {string} refreshToken
- * @returns {Promise<Object>}
  */
-export const refreshTokens = async (
-  refreshToken
-) => {
+export const refreshTokens = async (refreshToken) => {
   try {
-    const decoded = jwt.verify(
-      refreshToken,
-      env.JWT_REFRESH_SECRET
-    );
+    const decoded = jwt.verify(refreshToken, env.JWT_REFRESH_SECRET);
 
-    const user = await User.findById(
-      decoded.userId
-    );
-
+    const user = await User.findById(decoded.userId);
     if (!user) {
-      const error = new Error(
-        "User not found"
-      );
+      const error = new Error("User not found");
       error.statusCode = 404;
       throw error;
     }
 
-    if (
-      !user.refreshToken ||
-      user.refreshToken !== refreshToken
-    ) {
-      const error = new Error(
-        "Invalid refresh token"
-      );
+    if (!user.refreshToken || user.refreshToken !== refreshToken) {
+      const error = new Error("Invalid refresh token");
       error.statusCode = 401;
       throw error;
     }
 
-    const newAccessToken =
-      generateAccessToken(
-        user._id.toString()
-      );
-
-    const newRefreshToken =
-      generateRefreshToken(
-        user._id.toString()
-      );
-
+    const newAccessToken = generateAccessToken(user._id.toString());
+    const newRefreshToken = generateRefreshToken(user._id.toString());
     user.refreshToken = newRefreshToken;
-
     await user.save();
 
     return {
@@ -218,9 +124,7 @@ export const refreshTokens = async (
       refreshToken: newRefreshToken,
     };
   } catch (err) {
-    const error = new Error(
-      "Invalid or expired refresh token"
-    );
+    const error = new Error("Invalid or expired refresh token");
     error.statusCode = 401;
     throw error;
   }
@@ -228,48 +132,32 @@ export const refreshTokens = async (
 
 /**
  * Logout user
- * @param {string} userId
- * @returns {Promise<Object>}
  */
-export const logoutUser = async (
-  userId
-) => {
+export const logoutUser = async (userId) => {
   const user = await User.findById(userId);
-
-  if (!user) {
-    const error = new Error(
-      "User not found"
-    );
-    error.statusCode = 404;
-    throw error;
-  }
-
-  user.refreshToken = null;
-
-  await user.save();
-
-  return {};
-};
-
-/**
- * Update user profile
- * @param {string} userId
- * @param {Object} payload
- */
-export const updateProfile = async (userId, payload) => {
-  const user = await User.findById(userId);
-
   if (!user) {
     const error = new Error("User not found");
     error.statusCode = 404;
     throw error;
   }
+  user.refreshToken = null;
+  await user.save();
+  return {};
+};
 
+/**
+ * Update user profile
+ */
+export const updateProfile = async (userId, payload) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
+  }
   if (payload.name) user.name = payload.name;
   if (payload.avatar) user.avatar = payload.avatar;
-
   await user.save();
-
   return {
     id: user._id,
     name: user.name,
