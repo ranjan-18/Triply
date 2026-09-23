@@ -29,12 +29,16 @@ app.use(helmet({
 /**
  * CORS Configuration
  */
-app.use(
-  cors({
-    origin: [env.CLIENT_URL, "https://triply-t5t2.vercel.app", "http://localhost:5173"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: [env.CLIENT_URL, "https://triply-t5t2.vercel.app", "http://localhost:5173"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// Explicitly handle OPTIONS preflight requests for all routes
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 /**
  * Request Logger

@@ -10,8 +10,9 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: env.CLIENT_URL,
+      origin: [env.CLIENT_URL, "https://triply-t5t2.vercel.app", "http://localhost:5173"],
       credentials: true,
+      methods: ["GET", "POST"],
     },
   });
 
